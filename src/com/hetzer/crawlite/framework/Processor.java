@@ -1,9 +1,7 @@
 package com.hetzer.crawlite.framework;
 
+import com.hetzer.crawlite.datamodel.CrawlableURL;
+
 public interface Processor {
-	/**
-	 * @return
-	 * Is process be consumed, meaning to stop future process.
-	 */
-	public boolean process();
+	public boolean process(CrawlableURL url);
 }

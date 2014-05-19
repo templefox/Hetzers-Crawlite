@@ -4,7 +4,6 @@ import com.hetzer.crawlite.datamodel.CrawlableURL;
 import com.hetzer.crawlite.framework.UrlProvider;
 
 public class MockURLChain implements UrlProvider{
-
 	@Override
 	public CrawlableURL next() {
 		// TODO Auto-generated method stub
@@ -21,6 +20,12 @@ public class MockURLChain implements UrlProvider{
 	public void initialize() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean hasNext() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

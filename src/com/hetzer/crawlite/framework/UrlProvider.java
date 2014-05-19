@@ -12,6 +12,7 @@ import com.hetzer.crawlite.datamodel.CrawlableURL;
  */
 public interface UrlProvider {
 	public CrawlableURL next();
+	public boolean hasNext();
 	public void insert(CrawlableURL url);
 	public void initialize();
 }
