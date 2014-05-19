@@ -1,9 +1,9 @@
-package com.hetzer.crawlite.URLPool;
+package com.hetzer.crawlite.mock;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
-import com.hetzer.crawlite.framework.URLPool;
+import com.hetzer.crawlite.framework.UrlProvider;
 
-public class MockURLPool implements URLPool{
+public class MockURLChain implements UrlProvider{
 
 	@Override
 	public CrawlableURL next() {

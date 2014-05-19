@@ -1,24 +1,21 @@
 package com.hetzer.crawlite;
 
-import com.hetzer.crawlite.job.CrawlJobManager;
+
 
 public class Crawlite {
 	private CrawlJobManager jobManager= null;
 	
 	
 	public Crawlite(CrawlJobManager jobManager) {
-		super();
 		this.jobManager = jobManager;
 	}
+	
 
 	public static void main(String[] args) {
-		Crawlite crawlite = new Crawlite(new CrawlJobManager());
+		Crawlite crawlite = new Crawlite(CrawlJobManager.instance());
 		crawlite.launch();
 		
-		/*
-		 * Maybe start by some clicks on web.
-		 */
-		crawlite.getJobManager().startCrawler();
+		//XXX for test
 	}
 
 	public CrawlJobManager getJobManager() {
@@ -26,9 +23,10 @@ public class Crawlite {
 	}
 
 	/**
-	 * launch the web.
+	 * launch the web. Initialize manager.
 	 */
 	public void launch(){
-		//launch the web.
+		System.out.println("crewlite启动（任务管理器启动，网页启动）");
+		jobManager.initialize();
 	}
 }

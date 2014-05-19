@@ -10,7 +10,7 @@ import com.hetzer.crawlite.datamodel.CrawlableURL;
  *     <li>In what order unprocessed URIs will be processed
  * </ul>
  */
-public interface URLPool {
+public interface UrlProvider {
 	public CrawlableURL next();
 	public void insert(CrawlableURL url);
 	public void initialize();
