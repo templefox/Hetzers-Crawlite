@@ -8,6 +8,7 @@ import com.hetzer.crawlite.framework.CThread;
 import com.hetzer.crawlite.framework.ProcesserChain;
 import com.hetzer.crawlite.framework.UrlProvider;
 import com.hetzer.crawlite.mock.MockProcesserChain;
+import com.hetzer.crawlite.mock.MockProcessor;
 import com.hetzer.crawlite.mock.MockResource;
 import com.hetzer.crawlite.mock.MockURLChain;
 
@@ -35,6 +36,15 @@ public class CrawlJob {
 		for (int i = 0; i < threads.length; i++) {
 			threads[i].insert(this);
 		}
+		
+		setSeeds(new String[]{"a","b","c","d"});
+
+		processerChain.add(new MockProcessor());
+		processerChain.add(new MockProcessor());
+		processerChain.add(new MockProcessor());
+		processerChain.add(new MockProcessor());
+		processerChain.add(new MockProcessor());
+		
 	}
 	public void startCrawler(){
 		for (int i = 0; i < threads.length; i++) {
@@ -47,7 +57,9 @@ public class CrawlJob {
 	}
 	
 	public void setSeeds(String[] seeds){
-		urlProvider.insert(new MockResource("www.1.com"));
+		for (String seed : seeds) {
+			urlProvider.add(new MockResource(seed));			
+		}
 	}
 
 	public UrlProvider getUrlProvider() {

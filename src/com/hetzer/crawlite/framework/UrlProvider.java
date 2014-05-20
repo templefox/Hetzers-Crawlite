@@ -1,5 +1,8 @@
 package com.hetzer.crawlite.framework;
 
+import java.util.Iterator;
+import java.util.List;
+
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
 /**
@@ -10,9 +13,6 @@ import com.hetzer.crawlite.datamodel.CrawlableURL;
  *     <li>In what order unprocessed URIs will be processed
  * </ul>
  */
-public interface UrlProvider {
-	public CrawlableURL next();
-	public boolean hasNext();
-	public void insert(CrawlableURL url);
+public interface UrlProvider extends Iterator<CrawlableURL>,List<CrawlableURL>{
 	public void initialize();
 }
