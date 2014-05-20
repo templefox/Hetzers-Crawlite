@@ -1,6 +1,7 @@
 package com.hetzer.crawlite.mock;
 
 import java.util.Iterator;
+import java.util.Random;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 import com.hetzer.crawlite.framework.CThread;
@@ -12,7 +13,7 @@ import com.hetzer.crawlite.job.CrawlJob;
 public class MockCThread implements CThread {
 	Thread thread;
 	CrawlJob crawlJob;
-
+	static int i = 0;
 	public MockCThread() {
 		thread = new Thread(new Runnable() {
 			@Override
@@ -27,7 +28,9 @@ public class MockCThread implements CThread {
 							.hasNext();) {
 						Processor processor = (Processor) iterator.next();
 						processor.process(url);
-
+						if (Math.random()<0.2) {
+							provider.add(new MockResource("t"+i++));							
+						}
 					}
 
 				}
