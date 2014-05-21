@@ -7,6 +7,7 @@ import com.hetzer.crawlite.datamodel.CrawlableURL;
 import com.hetzer.crawlite.framework.CThread;
 import com.hetzer.crawlite.framework.ProcesserChain;
 import com.hetzer.crawlite.framework.UrlProvider;
+import com.hetzer.crawlite.framework.urlProvider.H2UrlProvider;
 import com.hetzer.crawlite.mock.MockProcesserChain;
 import com.hetzer.crawlite.mock.MockProcessor;
 import com.hetzer.crawlite.mock.MockResource;
@@ -21,7 +22,7 @@ public class CrawlJob {
 	private CThread[] threads;
 	
 	public CrawlJob(CrawlJobManager cjm) {
-		this(new MockURLChain(),new MockProcesserChain());
+		this(new H2UrlProvider(),new MockProcesserChain());
 		this.crawlJobManager = cjm;
 		name = "default-"+(new Random().nextInt()&0x7FFFFFFF);	
 	}

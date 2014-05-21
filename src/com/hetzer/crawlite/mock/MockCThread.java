@@ -13,28 +13,40 @@ import com.hetzer.crawlite.job.CrawlJob;
 public class MockCThread implements CThread {
 	Thread thread;
 	CrawlJob crawlJob;
+	ProcesserChain processerChain;
+	CrawlableURL current;
 	static int i = 0;
+
 	public MockCThread() {
 		thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				UrlProvider provider = crawlJob.getUrlProvider();
-				ProcesserChain processerChain = crawlJob.getProcesserChain();
-				while (provider.hasNext()) {
-					CrawlableURL url = (CrawlableURL) provider.next();
-					System.out.println(url.getURL());
-
-					for (Iterator iterator = processerChain.iterator(); iterator
-							.hasNext();) {
-						Processor processor = (Processor) iterator.next();
-						processor.process(url);
-						if (Math.random()<0.2) {
-							provider.add(new MockResource("t"+i++));							
+				while (true) {
+					UrlProvider provider = crawlJob.getUrlProvider();
+					processerChain = crawlJob
+							.getProcesserChain();
+					while (provider.hasNext()) {
+						current = (CrawlableURL) provider.next();
+						if (current== null) {
+							break;
 						}
+						System.out.println(current.getURL());
+
+						process();
+
+						provider.add(new MockResource("t" + i++));
+						current = null;
 					}
-
 				}
+			}
 
+			private void process() {
+				for (Iterator iterator = processerChain.iterator(); iterator
+						.hasNext();) {
+					Processor processor = (Processor) iterator.next();
+					processor.process(current);
+					
+				}
 			}
 		});
 	}
