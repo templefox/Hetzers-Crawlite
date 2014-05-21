@@ -25,7 +25,8 @@ public class H2UrlProvider implements UrlProvider {
 	private String password = "123456";
 	private Connection connection;
 	private boolean hasNext = true;
-
+	private boolean is;
+	
 	public H2UrlProvider() {
 		startServer();
 	}
