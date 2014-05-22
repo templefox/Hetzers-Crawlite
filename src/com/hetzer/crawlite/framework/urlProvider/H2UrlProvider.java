@@ -36,7 +36,7 @@ public class H2UrlProvider implements UrlProvider {
 			server = Server.createTcpServer(new String[] { "-tcpPort", port })
 					.start();
 			Class.forName("org.h2.Driver");
-			connection = DriverManager.getConnection("jdbc:h2:" + dbDir, user,
+			connection = DriverManager.getConnection("jdbc:h2:mem:" + dbDir, user,
 					password);
 			Statement stat = connection.createStatement();
 			stat.execute("DROP TABLE IF EXISTS TEST");
