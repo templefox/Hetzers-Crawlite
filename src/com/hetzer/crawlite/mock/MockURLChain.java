@@ -8,6 +8,7 @@ import java.util.ListIterator;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 import com.hetzer.crawlite.framework.UrlProvider;
+import com.hetzer.crawlite.job.CrawlJob;
 
 public class MockURLChain implements UrlProvider {
 	ArrayList<CrawlableURL> list = new ArrayList<CrawlableURL>();
@@ -171,6 +172,18 @@ public class MockURLChain implements UrlProvider {
 	public void initialize() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public CrawlableURL next(CrawlJob job) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean add(CrawlableURL e, CrawlJob job) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

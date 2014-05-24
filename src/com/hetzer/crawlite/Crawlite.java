@@ -5,7 +5,8 @@ import java.util.Properties;
 
 public class Crawlite {
 	private CrawlJobManager jobManager = null;
-	public static final String version = "crawlite.version";
+	public static final String VERSION = "crawlite.version";
+	public static final String PROPERTIES_FILE = "crawlite.properties";
 	private Properties properties;
 	
 	public Crawlite(CrawlJobManager jobManager) {
@@ -15,7 +16,7 @@ public class Crawlite {
 	public static void main(String[] args) {
 		Crawlite crawlite = new Crawlite(CrawlJobManager.instance());
 		crawlite.loadProperties();
-		// crawlite.launch();
+		crawlite.launch();
 
 		// XXX for test
 
@@ -28,10 +29,10 @@ public class Crawlite {
 	private void loadProperties() {
 		try {
 			properties = new Properties();
-			FileInputStream fis = new FileInputStream("crawlite.properties");
+			FileInputStream fis = new FileInputStream(PROPERTIES_FILE);
 			properties.load(fis);
 		} catch (Exception e) {
-			// TODO: handle exception
+			throw new RuntimeException("No properties file");
 		}
 	}
 
@@ -44,6 +45,6 @@ public class Crawlite {
 	 */
 	public void launch() {
 		System.out.println("crewlite启动（任务管理器启动，网页启动）");
-		jobManager.initialize();
+		jobManager.initialize(properties);
 	}
 }

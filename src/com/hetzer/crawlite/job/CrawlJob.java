@@ -6,6 +6,7 @@ import com.hetzer.crawlite.CrawlJobManager;
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 import com.hetzer.crawlite.framework.CThread;
 import com.hetzer.crawlite.framework.ProcesserChain;
+import com.hetzer.crawlite.framework.Processor;
 import com.hetzer.crawlite.framework.UrlProvider;
 import com.hetzer.crawlite.framework.urlProvider.H2UrlProvider;
 import com.hetzer.crawlite.mock.MockProcesserChain;
@@ -18,13 +19,12 @@ public class CrawlJob {
 	private UrlProvider urlProvider;
 	private ProcesserChain processerChain;
 	private String name;
-	private int THREAD_NUM;
+	private int THREAD_NUM = 1;
 	private CThread[] threads;
 	
 	public CrawlJob(CrawlJobManager cjm) {
-		this(new H2UrlProvider(),new MockProcesserChain());
+		this(H2UrlProvider.instance(),new MockProcesserChain());
 		this.crawlJobManager = cjm;
-		name = "default-"+(new Random().nextInt()&0x7FFFFFFF);	
 	}
 	
 	public CrawlJob(UrlProvider urlProvider,ProcesserChain processerChain){
@@ -36,18 +36,10 @@ public class CrawlJob {
 		threads = crawlJobManager.apply(THREAD_NUM);
 		for (int i = 0; i < threads.length; i++) {
 			threads[i].insert(this);
-		}
-		
-		setSeeds(new String[]{"a","b","c","d"});
-
-		processerChain.add(new MockProcessor());
-		processerChain.add(new MockProcessor());
-		processerChain.add(new MockProcessor());
-		processerChain.add(new MockProcessor());
-		processerChain.add(new MockProcessor());
-		
+		}		
 	}
 	public void startCrawler(){
+		System.out.println("start "+this.getName());
 		for (int i = 0; i < threads.length; i++) {
 			threads[i].jobStart();
 		}
@@ -57,9 +49,13 @@ public class CrawlJob {
 		return name;
 	}
 	
+	public void setName(String name){
+		this.name = name;
+	}
+	
 	public void setSeeds(String[] seeds){
 		for (String seed : seeds) {
-			urlProvider.add(new MockResource(seed));			
+			urlProvider.add(new MockResource(seed),this);			
 		}
 	}
 
@@ -69,5 +65,9 @@ public class CrawlJob {
 	
 	public ProcesserChain getProcesserChain(){
 		return processerChain;
+	}
+	
+	public void addProcessor(Processor processor){
+		processerChain.add(processor);
 	}
 }

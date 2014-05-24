@@ -14,6 +14,7 @@ import org.h2.tools.Server;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 import com.hetzer.crawlite.framework.UrlProvider;
+import com.hetzer.crawlite.job.CrawlJob;
 import com.hetzer.crawlite.mock.MockResource;
 
 public class H2UrlProvider implements UrlProvider {
@@ -26,9 +27,14 @@ public class H2UrlProvider implements UrlProvider {
 	private Connection connection;
 	private boolean hasNext = true;
 	private boolean is;
-	
-	public H2UrlProvider() {
+	private static H2UrlProvider provider = new H2UrlProvider();
+
+	private H2UrlProvider() {
 		startServer();
+	}
+
+	public static H2UrlProvider instance() {
+		return provider;
 	}
 
 	public void startServer() {
@@ -36,11 +42,11 @@ public class H2UrlProvider implements UrlProvider {
 			server = Server.createTcpServer(new String[] { "-tcpPort", port })
 					.start();
 			Class.forName("org.h2.Driver");
-			connection = DriverManager.getConnection("jdbc:h2:mem:" + dbDir, user,
-					password);
+			connection = DriverManager.getConnection("jdbc:h2:mem:" + dbDir,
+					user, password);
 			Statement stat = connection.createStatement();
 			stat.execute("DROP TABLE IF EXISTS TEST");
-			stat.execute("CREATE TABLE TEST(URL VARCHAR(255),ISDONE BOOLEAN)");
+			stat.execute("CREATE TABLE TEST(URL VARCHAR(255),ISDONE BOOLEAN,JOB VARCHAR(255))");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -71,8 +77,34 @@ public class H2UrlProvider implements UrlProvider {
 					.executeQuery("select top 1 URL from TEST where ISDONE = false ");
 			if (result.next()) {
 				url = result.getString("URL");
-				int r = statement.executeUpdate("update TEST SET ISDONE = 1 WHERE URL = '"+url+"';");
-				if (r==0) {
+				int r = statement
+						.executeUpdate("update TEST SET ISDONE = 1 WHERE URL = '"
+								+ url + "';");
+				if (r == 0) {
+					throw new IllegalAccessError("Can't refresh");
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new MockResource(url);
+	}
+
+	public synchronized CrawlableURL next(CrawlJob job) {
+		Statement statement;
+		ResultSet result = null;
+		String url = null;
+		try {
+			statement = connection.createStatement();
+			result = statement
+					.executeQuery("select top 1 URL from TEST where ISDONE = false "+"and JOB = '" + job.getName() + "';");
+			if (result.next()) {
+				url = result.getString("URL");
+				int r = statement
+						.executeUpdate("update TEST SET ISDONE = 1 WHERE URL = '"
+								+ url + "' and JOB = '" + job.getName() + "';");
+				if (r == 0) {
 					throw new IllegalAccessError("Can't refresh");
 				}
 			}
@@ -133,6 +165,21 @@ public class H2UrlProvider implements UrlProvider {
 			stat = connection.createStatement();
 			result = stat.executeUpdate("insert into TEST VALUES ('"
 					+ e.getURL() + "',false)");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		return result == 1 ? true : false;
+	}
+
+	public boolean add(CrawlableURL e, CrawlJob job) {
+		Statement stat;
+		int result = 0;
+		try {
+			stat = connection.createStatement();
+			result = stat.executeUpdate("insert into TEST VALUES ('"
+					+ e.getURL() + "',false,'" + job.getName() + "')");
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

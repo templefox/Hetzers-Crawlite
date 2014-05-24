@@ -21,20 +21,19 @@ public class MockCThread implements CThread {
 		thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while (true) {
+				a:while (true) {
 					UrlProvider provider = crawlJob.getUrlProvider();
 					processerChain = crawlJob
 							.getProcesserChain();
-					while (provider.hasNext()) {
-						current = (CrawlableURL) provider.next();
-						if (current== null) {
-							break;
+					while (true) {
+						current = (CrawlableURL) provider.next(crawlJob);
+						if (current.getURL()== null) {
+							break a;
 						}
-						System.out.println(current.getURL());
+						System.out.println(current.getURL()+crawlJob.getName());
 
 						process();
 
-						provider.add(new MockResource("t" + i++));
 						current = null;
 					}
 				}

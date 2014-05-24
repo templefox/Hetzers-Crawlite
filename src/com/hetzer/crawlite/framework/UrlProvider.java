@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
+import com.hetzer.crawlite.job.CrawlJob;
 
 /**
  * <ul>
@@ -15,4 +16,6 @@ import com.hetzer.crawlite.datamodel.CrawlableURL;
  */
 public interface UrlProvider extends Iterator<CrawlableURL>,List<CrawlableURL>{
 	public void initialize();
+	public CrawlableURL next(CrawlJob job);
+	public boolean add(CrawlableURL e, CrawlJob job);
 }
