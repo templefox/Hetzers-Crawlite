@@ -19,7 +19,7 @@ public class GxyCThread extends Thread implements CThread {
 	private boolean isRun = false;
 	private boolean isWait = true;
 	private boolean isGone = false;
-
+    private boolean ischosen = false;
 	CrawlJob crawlJob;
 	ProcesserChain processerChain;
 	CrawlableURL current;
@@ -28,6 +28,17 @@ public class GxyCThread extends Thread implements CThread {
 		super(tg, name);
 		this.threadname = name;
 	}
+
+	
+	public boolean isIschosen() {
+		return ischosen;
+	}
+
+
+	public void setIschosen(boolean ischosen) {
+		this.ischosen = ischosen;
+	}
+
 
 	@Override
 	public void run() {
@@ -132,6 +143,10 @@ public class GxyCThread extends Thread implements CThread {
 		// TODO Auto-generated method stub
 		isRun = true;
 		isWait = false;
+		if(isGone==true)
+		{
+			jobRecle();
+		}
 	}
 
 	@Override
@@ -143,6 +158,7 @@ public class GxyCThread extends Thread implements CThread {
 				objPause.notify();
 			}
 		}
+		ischosen=false;
 		isGone = true;
 	}
 

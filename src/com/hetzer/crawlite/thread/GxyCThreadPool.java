@@ -74,13 +74,13 @@ public class GxyCThreadPool implements CThreadPool {
 		GxyCThread[] temp = new GxyCThread[num];
 		int j = 0;
 		tg.enumerate(thrds);
+		synchronized (this) {
 			for(int i=0;i<max && j<num;i++)
 		    {
-		    	if(thrds[i].getAbandon()==thrds[i].getRunTime())
+		    	if((thrds[i].getAbandon()==thrds[i].getRunTime()) && (thrds[i].isIschosen()==false))
 		    	{
 		    		temp[j]=thrds[i];
-		    		temp[j].jobRecle();
-		    		temp[j].jobPause();
+		    		temp[j].setIschosen(true);
 		    		j=j+1;
 		    	}
 		    }
@@ -88,6 +88,7 @@ public class GxyCThreadPool implements CThreadPool {
 			{
 				throw new OverFlowException();
 			}
+		}
 			return temp;
 	}
 	
