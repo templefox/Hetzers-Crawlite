@@ -40,13 +40,13 @@ public class CrawlJobFactory {
 
 		CrawlJob job = new CrawlJob(cjm);
 		job.setName(jobName);
-		job.setSeeds(new String[] { "a", "b", "c", "d" });
 		try {
 			loadConfigs(job);
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		job.setSeeds(new String[] { "a", "b", "c", "d" });
 		return job;
 	}
 
@@ -63,7 +63,8 @@ public class CrawlJobFactory {
 		SAXReader saxReader = new SAXReader();
 		Document document = saxReader.read(config);
 		Element root = document.getRootElement();
-		job.setName(root.attributeValue("name"));
+		String name = root.attributeValue("name");
+		job.setName(name);
 		Element processorsElement = root.element("Processor");
 		Iterator iterator = processorsElement.elementIterator();
 		for (; iterator.hasNext();) {

@@ -46,7 +46,7 @@ public class H2UrlProvider implements UrlProvider {
 					user, password);
 			Statement stat = connection.createStatement();
 			stat.execute("DROP TABLE IF EXISTS TEST");
-			stat.execute("CREATE TABLE TEST(URL VARCHAR(255),ISDONE BOOLEAN,JOB VARCHAR(255))");
+			stat.execute("CREATE TABLE TEST(URL VARCHAR(255),ISDONE BOOLEAN,JOB VARCHAR(255),ID INT AUTO_INCREMENT(0,1) PRIMARY KEY)");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -178,8 +178,8 @@ public class H2UrlProvider implements UrlProvider {
 		int result = 0;
 		try {
 			stat = connection.createStatement();
-			result = stat.executeUpdate("insert into TEST VALUES ('"
-					+ e.getURL() + "',false,'" + job.getName() + "')");
+			result = stat.executeUpdate("insert into TEST SET URL = '"
+					+ e.getURL() + "' ,  ISDONE = 'false' ,  JOB = '" + job.getName() + "'");
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

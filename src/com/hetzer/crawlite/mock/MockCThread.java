@@ -21,16 +21,16 @@ public class MockCThread implements CThread {
 		thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				a:while (true) {
+				a: while (true) {
 					UrlProvider provider = crawlJob.getUrlProvider();
-					processerChain = crawlJob
-							.getProcesserChain();
+					processerChain = crawlJob.getProcesserChain();
 					while (true) {
 						current = (CrawlableURL) provider.next(crawlJob);
-						if (current.getURL()== null) {
+						if (current.getURL() == null) {
 							break a;
 						}
-						System.out.println(current.getURL()+crawlJob.getName());
+						System.out.println(current.getURL()
+								+ crawlJob.getName());
 
 						process();
 
@@ -39,15 +39,15 @@ public class MockCThread implements CThread {
 				}
 			}
 
-			private void process() {
-				for (Iterator iterator = processerChain.iterator(); iterator
-						.hasNext();) {
-					Processor processor = (Processor) iterator.next();
-					processor.process(current);
-					
-				}
-			}
 		});
+	}
+
+	private void process() {
+		for (Iterator iterator = processerChain.iterator(); iterator.hasNext();) {
+			Processor processor = (Processor) iterator.next();
+			processor.process(current);
+
+		}
 	}
 
 	@Override
@@ -80,16 +80,44 @@ public class MockCThread implements CThread {
 
 	}
 
-	@Override
 	public thread_state getState() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public thread_state getMyState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getTaskName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean getAbandon() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void jobRecle() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean getRunTime() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

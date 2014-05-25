@@ -17,8 +17,14 @@ public interface CThread {
 
 	public void jobResume();
 
-	public thread_state getState();
+	public thread_state getMyState();
 
-	public String getName();
+	public String getTaskName();
+	
+    public boolean getAbandon();
+	
+	public void jobRecle();
+
+	public boolean getRunTime();
 
 }

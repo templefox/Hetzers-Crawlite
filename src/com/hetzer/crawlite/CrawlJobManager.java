@@ -7,11 +7,13 @@ import java.util.Properties;
 
 import org.omg.PortableServer.POA;
 
+import com.hetzer.crawlite.exception.OverFlowException;
 import com.hetzer.crawlite.framework.CThread;
 import com.hetzer.crawlite.framework.CThreadPool;
 import com.hetzer.crawlite.job.CrawlJob;
 import com.hetzer.crawlite.job.CrawlJobFactory;
 import com.hetzer.crawlite.mock.MockCThreadPool;
+import com.hetzer.crawlite.thread.GxyCThreadPool;
 
 /**
  * manage jobs.
@@ -37,7 +39,7 @@ public class CrawlJobManager {
 
 	public void initialize(Properties properties) {
 		System.out.println("CrawlJobManager initialize");
-		threadPool = new MockCThreadPool();
+		threadPool = new GxyCThreadPool("GXY");
 		loadConfigs(properties);
 		loadJobs();
 		initThreadPool();
@@ -47,7 +49,7 @@ public class CrawlJobManager {
 
 	private void loadConfigs(Properties properties) {
 		jobPath = properties.getProperty("jobPath", "jobs");
-		MAX_THREAD = 2;
+		MAX_THREAD = 6;
 		System.out.println("loadConfigs");
 	}
 
@@ -63,7 +65,7 @@ public class CrawlJobManager {
 						new CrawlJobFactory().makeJob(this, jobConfig));
 			}
 		} else {
-			throw new IllegalStateException("jobDir is not a directory");
+			//throw new IllegalStateException("jobDir is not a directory");
 		}
 
 		jobMap.put("test", new CrawlJobFactory().makeJob(this));
@@ -98,7 +100,7 @@ public class CrawlJobManager {
 		}
 	}
 
-	public CThread[] apply(int num) {
+	public CThread[] apply(int num) throws OverFlowException {
 		return threadPool.apply(num);
 	}
 

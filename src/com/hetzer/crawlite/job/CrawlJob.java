@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hetzer.crawlite.CrawlJobManager;
 import com.hetzer.crawlite.datamodel.CrawlableURL;
+import com.hetzer.crawlite.exception.OverFlowException;
 import com.hetzer.crawlite.framework.CThread;
 import com.hetzer.crawlite.framework.ProcesserChain;
 import com.hetzer.crawlite.framework.Processor;
@@ -33,7 +34,12 @@ public class CrawlJob {
 	}
 	
 	public void initialize(){
-		threads = crawlJobManager.apply(THREAD_NUM);
+		try {
+			threads = crawlJobManager.apply(THREAD_NUM);
+		} catch (OverFlowException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for (int i = 0; i < threads.length; i++) {
 			threads[i].insert(this);
 		}		

@@ -1,5 +1,6 @@
 package com.hetzer.crawlite.framework;
 
+import com.hetzer.crawlite.exception.OverFlowException;
 import com.hetzer.crawlite.job.CrawlJob;
 
 public interface CThreadPool {
@@ -11,5 +12,5 @@ public interface CThreadPool {
 
 	public void initialize(int max);
 	
-	public CThread[] apply( int num);
+	public CThread[] apply( int num) throws OverFlowException;
 }
