@@ -34,18 +34,18 @@ public class CrawlJobFactory {
 	private String jobName = "";
 	private File config;
 
+	
 	public CrawlJob makeJob(CrawlJobManager cjm, File configFile) {
 		jobsDir = cjm.getJobPath();
 		config = configFile;
 
 		CrawlJob job = new CrawlJob(cjm);
-		job.setName(jobName);
 		try {
 			loadConfigs(job);
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		job.setName(jobName);
 		job.setSeeds(new String[] { "a", "b", "c", "d" });
 		return job;
 	}
@@ -63,8 +63,7 @@ public class CrawlJobFactory {
 		SAXReader saxReader = new SAXReader();
 		Document document = saxReader.read(config);
 		Element root = document.getRootElement();
-		String name = root.attributeValue("name");
-		job.setName(name);
+		jobName = root.attributeValue("name");
 		Element processorsElement = root.element("Processor");
 		Iterator iterator = processorsElement.elementIterator();
 		for (; iterator.hasNext();) {

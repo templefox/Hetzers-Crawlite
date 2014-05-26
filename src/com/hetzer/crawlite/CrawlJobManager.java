@@ -56,19 +56,27 @@ public class CrawlJobManager {
 	private void loadJobs() {
 		System.out.println("loadJobs");
 
-		File jobDir = new File(jobPath);
-		if (jobDir.isDirectory()) {
-			File[] dirs = jobDir.listFiles();
-			for (File dir : dirs) {
-				File jobConfig = new File(dir, "config.xml");
-				jobMap.put("loaded",
-						new CrawlJobFactory().makeJob(this, jobConfig));
+		File jobDirs = new File(jobPath);
+		if (jobDirs.isDirectory()) {
+			File[] dirs = jobDirs.listFiles();
+			for (File ajobDir : dirs) {
+				loadJob(ajobDir);
 			}
 		} else {
 			//throw new IllegalStateException("jobDir is not a directory");
 		}
 
-		jobMap.put("test", new CrawlJobFactory().makeJob(this));
+		//jobMap.put("test", new CrawlJobFactory().makeJob(this));
+	}
+
+	private void loadJob(File dir) {
+		File jobConfig = new File(dir, "config.xml");
+		CrawlJob job = new CrawlJobFactory().makeJob(this, jobConfig);
+		putJob(job.getName(), job);
+	}
+	
+	public void putJob(String name,CrawlJob job){
+		jobMap.put(name, job);
 	}
 
 	private void initThreadPool() {
