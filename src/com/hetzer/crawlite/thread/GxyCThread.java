@@ -13,6 +13,8 @@ import com.hetzer.crawlite.mock.MockResource;
 
 public class GxyCThread extends Thread implements CThread {
 	static int i = 0;
+	private Object objInit = new Object();
+	private boolean isInit = true;
 	private String threadname;
 	private Object objPause = new Object();
 	private Object objAban = new Object();
@@ -42,16 +44,30 @@ public class GxyCThread extends Thread implements CThread {
 
 	@Override
 	public void run() {
-		while (true) {
+		checkIsinit();
 			while (isRun) {
 				doCrawlTask();
-
+				
 				checkIsWait();
 
 				checkIsAbandon();
 			}
-		}
 	}
+
+	private void checkIsinit() {
+		synchronized (objInit) {
+			while (isInit) {
+				try {
+					objInit.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
+
 
 	private void checkIsAbandon() {
 		synchronized (objAban) {
@@ -141,12 +157,21 @@ public class GxyCThread extends Thread implements CThread {
 	@Override
 	public void jobStart() {
 		// TODO Auto-generated method stub
-		isRun = true;
-		isWait = false;
+		
 		if(isGone==true)
 		{
 			jobRecle();
 		}
+		if(isInit==true)
+		{
+			isInit=false;
+			synchronized (objInit) {
+				objInit.notify();
+			}
+		}
+		isWait = false;
+		isRun = true;
+		
 	}
 
 	@Override
