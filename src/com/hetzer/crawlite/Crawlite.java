@@ -3,18 +3,25 @@ package com.hetzer.crawlite;
 import java.io.FileInputStream;
 import java.util.Properties;
 
+import javax.management.InstanceAlreadyExistsException;
+
 public class Crawlite {
 	private CrawlJobManager jobManager = null;
 	public static final String VERSION = "crawlite.version";
 	public static final String PROPERTIES_FILE = "crawlite.properties";
 	private Properties properties;
+	public static Crawlite crawlite = new Crawlite(CrawlJobManager.instance());
 	
-	public Crawlite(CrawlJobManager jobManager) {
+	public static Crawlite instance(){
+		return crawlite;
+	}
+	
+	private Crawlite(CrawlJobManager jobManager) {
 		this.jobManager = jobManager;
 	}
 
 	public static void main(String[] args) {
-		Crawlite crawlite = new Crawlite(CrawlJobManager.instance());
+		Crawlite crawlite = Crawlite.instance();
 		crawlite.loadProperties();
 		crawlite.launch();
 

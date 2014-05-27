@@ -43,16 +43,24 @@ public class CrawlJobManager {
 		loadConfigs(properties);
 		loadJobs();
 		initThreadPool();
-
-		startCrawlers(new String[] {});
+		
+		//CrawlJob job = makeNewJob(null);
+		CrawlJob job = new CrawlJobFactory().makeDefaultJob(this);
+		putJob(job.getName(), job);
+		
+		
+		startCrawlers(new String[] {job.getName()});
 	}
 
 	private void loadConfigs(Properties properties) {
 		jobPath = properties.getProperty("jobPath", "jobs");
-		MAX_THREAD = 6;
+		MAX_THREAD = 1;
 		System.out.println("loadConfigs");
 	}
 
+	/**
+	 * Load exist jobs from directory.
+	 */
 	private void loadJobs() {
 		System.out.println("loadJobs");
 
@@ -68,7 +76,11 @@ public class CrawlJobManager {
 
 		//jobMap.put("test", new CrawlJobFactory().makeJob(this));
 	}
-
+	
+	/**
+	 * Load an exist job from target directory. Make instance and put into map.
+	 * @param dir represent a job, which contains config.xml.
+	 */
 	private void loadJob(File dir) {
 		File jobConfig = new File(dir, "config.xml");
 		CrawlJob job = new CrawlJobFactory().makeJob(this, jobConfig);
@@ -84,6 +96,18 @@ public class CrawlJobManager {
 		System.out.println("initThreadPool");
 	}
 
+	/**
+	 * Make a new job. First make the directory and the config.xml according the "configs".
+	 * @param configs configuration of job.
+	 * @return
+	 */
+	public CrawlJob makeNewJob(Map<String, Object> configs){
+		CrawlJobFactory factory = new CrawlJobFactory();
+		File jobDir = factory.makedir(jobPath);
+		File config = factory.makeConfigXml(jobDir,configs);
+		return factory.makeJob(this, config);
+	}
+	
 	/**
 	 * @param name
 	 *            if null than start all.
@@ -102,7 +126,8 @@ public class CrawlJobManager {
 				CrawlJob job = jobMap.get(name);
 				job.initialize();
 			}
-			for (CrawlJob job : jobMap.values()) {
+			for (String name : names) {
+				CrawlJob job = jobMap.get(name);
 				job.startCrawler();
 			}
 		}

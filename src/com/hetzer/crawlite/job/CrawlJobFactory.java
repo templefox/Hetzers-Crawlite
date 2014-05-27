@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 
 import javassist.CannotCompileException;
@@ -34,6 +35,9 @@ public class CrawlJobFactory {
 	private String jobName = "";
 	private File config;
 
+	public CrawlJobFactory(){
+		jobName = "default-" + (new Random().nextInt() & 0x7FFFFFFF);
+	}
 	
 	public CrawlJob makeJob(CrawlJobManager cjm, File configFile) {
 		jobsDir = cjm.getJobPath();
@@ -50,11 +54,10 @@ public class CrawlJobFactory {
 		return job;
 	}
 
-	public CrawlJob makeJob(CrawlJobManager cjm) {
-		jobName = "default-" + (new Random().nextInt() & 0x7FFFFFFF);
+	public CrawlJob makeDefaultJob(CrawlJobManager cjm) {
 		jobsDir = cjm.getJobPath();
-		File dirFile = makedir();
-		config = makeConfigXml(dirFile);
+		File dirFile = makedir(jobsDir);
+		config = makeConfigXml(dirFile, null);
 
 		return makeJob(cjm, config);
 	}
@@ -117,7 +120,7 @@ public class CrawlJobFactory {
 		}
 	}
 
-	private File makeConfigXml(File dirFile) {
+	public File makeConfigXml(File dirFile, Map<String, Object> configs) {
 		Document document = DocumentHelper.createDocument();
 		Element root = document.addElement("CrawlJob");
 		root.addAttribute("name", jobName);
@@ -148,7 +151,8 @@ public class CrawlJobFactory {
 		return config;
 	}
 
-	private File makedir() {
+	public File makedir(String jobsDir) {
+		this.jobsDir = jobsDir;
 		File dir = new File(jobsDir);
 		dir.mkdir();
 		File theJob = new File(dir, jobName);
