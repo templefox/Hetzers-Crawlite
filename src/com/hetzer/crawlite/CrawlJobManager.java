@@ -14,6 +14,8 @@ import com.hetzer.crawlite.framework.Processor;
 import com.hetzer.crawlite.job.CrawlJob;
 import com.hetzer.crawlite.job.CrawlJobFactory;
 import com.hetzer.crawlite.mock.MockProcessor;
+import com.hetzer.crawlite.processers.Download_CSS;
+import com.hetzer.crawlite.processers.Write_CSS;
 import com.hetzer.crawlite.thread.GxyCThreadPool;
 
 /**
@@ -48,12 +50,15 @@ public class CrawlJobManager {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("name", "test job");
 		map.put("ThreadNum", 4);
+		
 		List<Class<? extends Processor>> list = new ArrayList<Class<? extends Processor>>();
-		list.add(MockProcessor.class);
-		list.add(MockProcessor.class);
-		list.add(MockProcessor.class);
+		list.add(Write_CSS.class);
+		list.add(Download_CSS.class);
+		
 		map.put("processorList", list);
 		CrawlJob job =makeNewJob(map);
+		job.setSeeds(new String[]{"http://static.soku.com/v1.0.0753/soku/inthesky/giantstar/css/s_comm.css"});
+		
 		putJob(job.getName(), job);
 		
 		

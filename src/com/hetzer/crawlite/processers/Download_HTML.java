@@ -1,16 +1,18 @@
 package com.hetzer.crawlite.processers;
 
+import java.io.File;
 import java.io.FileWriter;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class Download_HTML extends Download_Abstract {
-	public void doit(CrawlableURL source) {
+public class Download_HTML extends AbstractDownload {
+	public boolean Download(CrawlableURL source,File dir) {
 		if(source.getWebsource()!=null)
 		{
 		try {
-
-			FileWriter fw = new FileWriter("html_src\\index.html");
+			File file = new File(dir,"html_src");
+            file.mkdir();
+			FileWriter fw = new FileWriter("dir\\html_src\\index.html");
 			fw.write(source.getWebsource());
 			fw.close();
 			System.out.println("Websource Download Successfully");
@@ -18,6 +20,7 @@ public class Download_HTML extends Download_Abstract {
 			System.out.println("Websource Download Fail");
 		}
 		}
+		return true;
 
 	}
 

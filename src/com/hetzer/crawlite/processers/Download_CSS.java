@@ -1,12 +1,13 @@
 package com.hetzer.crawlite.processers;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.util.Map;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class Download_CSS extends Download_Abstract{
-	public void doit(CrawlableURL source)
+public class Download_CSS extends AbstractDownload{
+	public boolean Download(CrawlableURL source,File dir)
 	{
 		if(source.getCSS_I()!=0)
 		{
@@ -22,8 +23,9 @@ public class Download_CSS extends Download_Abstract{
 		//while(download_count_css<source.getCSS_I())
 		//{
 			//FileWriter fw_js = new FileWriter("js\\"+download_count_js+".js");   
-
-            FileWriter fw_css = new FileWriter("css\\"+a+".css");      
+            File file = new File(dir,"css");
+            file.mkdir();
+            FileWriter fw_css = new FileWriter("dir\\css\\"+a+".css");      
             fw_css.write(map_css.get("CSS1"));
             fw_css.close();                              
             //download_count_css++;
@@ -32,8 +34,11 @@ public class Download_CSS extends Download_Abstract{
 		}
 		catch (Exception e)
 		{System.out.println("CSS Download Fail");
+		
 		e.printStackTrace();}
+		
 		}
+		return true;
 	}
 
 }

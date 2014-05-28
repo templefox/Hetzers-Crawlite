@@ -1,22 +1,19 @@
 package com.hetzer.crawlite.processers;
 
+import java.io.File;
+
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 import com.hetzer.crawlite.framework.Processor;
 import com.hetzer.crawlite.job.CrawlJob;
 
-public abstract class Download_Abstract implements Processor{
+public abstract class AbstractDownload implements Processor{
 	@Override
 	public boolean process(CrawlableURL source,CrawlJob crawlJob){
-		doit(source);
+		File dir = crawlJob.getDirectory();
 		
-		if(source.getURL()!=null)
-		{
-			return true;
-		}
-		else {
-			return false;
-		}
+		return Download(source,dir);
+
 	}
-	public abstract void doit(CrawlableURL url);
+	public abstract boolean Download(CrawlableURL url, File dir);
 
 }

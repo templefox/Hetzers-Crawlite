@@ -6,8 +6,8 @@ import java.util.Map;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class Download_Image extends Download_Abstract{
-	public void doit(CrawlableURL source) {
+public class Download_Image extends AbstractDownload{
+	public boolean Download(CrawlableURL source,File dir) {
 		if(source.getIMG_I()!=0)
 		{
 
@@ -23,7 +23,9 @@ public class Download_Image extends Download_Abstract{
 			//while (download_count < source.getIMG_I()-1) {
 
 				if (source.getURL().matches("http.*?")) {
-					File storeFile = new File("img\\" + a + ".jpg");
+					File file = new File(dir,"img");
+		            file.mkdir();
+					File storeFile = new File("dir\\img\\" + a + ".jpg");
 					FileOutputStream fileOutputStream = new FileOutputStream(
 							storeFile);
 					fileOutputStream.write(map.get("pc1"));
@@ -44,6 +46,7 @@ public class Download_Image extends Download_Abstract{
 			System.out.println("IMG Download Fail");
 		}
 		}
+		return true;
 	}
 
 }

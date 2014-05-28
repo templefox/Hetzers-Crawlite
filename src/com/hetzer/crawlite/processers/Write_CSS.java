@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class Write_CSS extends Write_Abstract {
+public class Write_CSS extends AbstractWrite {
 	public void doit(CrawlableURL source)
 	{
 		if(source.getURL().matches(".*?css"))

@@ -4,8 +4,7 @@ import com.hetzer.crawlite.datamodel.CrawlableURL;
 import com.hetzer.crawlite.framework.Processor;
 import com.hetzer.crawlite.job.CrawlJob;
 
-public abstract class Analyze_Abstract implements Processor {
-	
+public abstract class AbstractWrite implements Processor {
 	@Override
 	public boolean process(CrawlableURL source,CrawlJob crawlJob){
 		doit(source);

@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class Write_JavaScript extends Write_Abstract {
+public class Write_JavaScript extends AbstractWrite {
 	public void doit(CrawlableURL source) 
 	{
 		if(source.getURL().matches(".*?js"))

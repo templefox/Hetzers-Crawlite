@@ -2,8 +2,8 @@ package com.hetzer.crawlite.processers;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class Analyze_Implementation extends Analyze_Abstract {
-	public void doit(CrawlableURL source)
+public class Analyze_Implementation extends AbstractAnalyzer {
+	public boolean analyzer(CrawlableURL source)
 	{
 		source.setwebsource(null);
 		source.set_img_url_stockmap(null);
@@ -15,6 +15,7 @@ public class Analyze_Implementation extends Analyze_Abstract {
 		source.setMap_css_url_stockMap(null);
 		source.setMap_js(null);
 		source.setMap_js_url_stockMap(null);
+		return true;
 	}
 
 }
