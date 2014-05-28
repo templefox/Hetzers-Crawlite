@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -16,6 +17,7 @@ import javassist.CtClass;
 import javassist.Loader;
 import javassist.NotFoundException;
 
+import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -34,11 +36,18 @@ public class CrawlJobFactory {
 	private String jobsDir;
 	private String jobName = "";
 	private File config;
+	private Map<String, Object> map;
 
-	public CrawlJobFactory(){
-		jobName = "default-" + (new Random().nextInt() & 0x7FFFFFFF);
+	public CrawlJobFactory(Map<String, Object> map) {
+		this.map = map;
+		if (map != null && map.containsKey("name")) {
+			jobName = (String) map.get("name");
+		} else {
+			jobName = "default-" + (new Random().nextInt() & 0x7FFFFFFF);
+		}
+
 	}
-	
+
 	public CrawlJob makeJob(CrawlJobManager cjm, File configFile) {
 		jobsDir = cjm.getJobPath();
 		config = configFile;
@@ -57,8 +66,33 @@ public class CrawlJobFactory {
 	public CrawlJob makeDefaultJob(CrawlJobManager cjm) {
 		jobsDir = cjm.getJobPath();
 		File dirFile = makedir(jobsDir);
-		config = makeConfigXml(dirFile, null);
+		Document document = DocumentHelper.createDocument();
+		Element root = document.addElement("CrawlJob");
+		root.addAttribute("name", jobName);
+		root.addAttribute("class", CrawlJob.class.getName());
 
+		Element processors = root.addElement("Processor");
+		for (int i = 0; i < 2; i++) {
+			Element p = processors.addElement(PROCESSOR_OBJECT);
+			p.addAttribute("name", "MockProcess");
+			p.addAttribute("class", MockProcessor.class.getName());
+		}
+		Element p = processors.addElement(PROCESSOR_OBJECT);
+		p.addAttribute("name", "TestP");
+		p.addAttribute("file", "TestP.class");
+
+		File config = null;
+		try {
+			document.normalize();
+			config = new File(dirFile, "config.xml");
+			XMLWriter output = new XMLWriter(new FileWriter(config),
+					OutputFormat.createPrettyPrint());
+			output.write(document);
+			output.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return makeJob(cjm, config);
 	}
 
@@ -66,7 +100,12 @@ public class CrawlJobFactory {
 		SAXReader saxReader = new SAXReader();
 		Document document = saxReader.read(config);
 		Element root = document.getRootElement();
+
 		jobName = root.attributeValue("name");
+
+		Element threadNumElement = root.element("ThreadNum");
+		job.setThreadNum(new Integer(threadNumElement.getText()));
+
 		Element processorsElement = root.element("Processor");
 		Iterator iterator = processorsElement.elementIterator();
 		for (; iterator.hasNext();) {
@@ -120,22 +159,30 @@ public class CrawlJobFactory {
 		}
 	}
 
-	public File makeConfigXml(File dirFile, Map<String, Object> configs) {
+	public File makeConfigXml(File dirFile) {
 		Document document = DocumentHelper.createDocument();
 		Element root = document.addElement("CrawlJob");
-		root.addAttribute("name", jobName);
+
+		root.addAttribute("name", (String) map.get("name"));
 		root.addAttribute("class", CrawlJob.class.getName());
 
-		Element processors = root.addElement("Processor");
-		for (int i = 0; i < 2; i++) {
-			Element p = processors.addElement(PROCESSOR_OBJECT);
-			p.addAttribute("name", "MockProcess");
-			p.addAttribute("class", MockProcessor.class.getName());
-		}
-		Element p = processors.addElement(PROCESSOR_OBJECT);
-		p.addAttribute("name", "TestP");
-		p.addAttribute("file", "TestP.class");
+		Element threadConfig = root.addElement("ThreadNum");
+		threadConfig.addAttribute("name", "ThreadNum");
+		threadConfig.setText(Integer.toString((int) map.get("ThreadNum")));
 
+		Element processors = root.addElement("Processor");
+		List<Class<? extends Processor>> processorList = (List<Class<? extends Processor>>) map
+				.get("processorList");
+		if (processorList != null) {
+			for (Iterator iterator = processorList.iterator(); iterator
+					.hasNext();) {
+				Class<? extends Processor> clazz = (Class<? extends Processor>) iterator
+						.next();
+				Element p = processors.addElement(PROCESSOR_OBJECT);
+				p.addAttribute("name", clazz.getSimpleName());
+				p.addAttribute("class", clazz.getName());
+			}
+		}
 		File config = null;
 		try {
 			document.normalize();

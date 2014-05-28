@@ -1,7 +1,9 @@
 package com.hetzer.crawlite;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -10,9 +12,11 @@ import org.omg.PortableServer.POA;
 import com.hetzer.crawlite.exception.OverFlowException;
 import com.hetzer.crawlite.framework.CThread;
 import com.hetzer.crawlite.framework.CThreadPool;
+import com.hetzer.crawlite.framework.Processor;
 import com.hetzer.crawlite.job.CrawlJob;
 import com.hetzer.crawlite.job.CrawlJobFactory;
 import com.hetzer.crawlite.mock.MockCThreadPool;
+import com.hetzer.crawlite.mock.MockProcessor;
 import com.hetzer.crawlite.thread.GxyCThreadPool;
 
 /**
@@ -43,9 +47,16 @@ public class CrawlJobManager {
 		loadConfigs(properties);
 		loadJobs();
 		initThreadPool();
-		
-		//CrawlJob job = makeNewJob(null);
-		CrawlJob job = new CrawlJobFactory().makeDefaultJob(this);
+
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("name", "test job");
+		map.put("ThreadNum", 4);
+		List<Class<? extends Processor>> list = new ArrayList<Class<? extends Processor>>();
+		list.add(MockProcessor.class);
+		list.add(MockProcessor.class);
+		list.add(MockProcessor.class);
+		map.put("processorList", list);
+		CrawlJob job =makeNewJob(map);
 		putJob(job.getName(), job);
 		
 		
@@ -54,7 +65,7 @@ public class CrawlJobManager {
 
 	private void loadConfigs(Properties properties) {
 		jobPath = properties.getProperty("jobPath", "jobs");
-		MAX_THREAD = 1;
+		MAX_THREAD = 10;
 		System.out.println("loadConfigs");
 	}
 
@@ -83,7 +94,7 @@ public class CrawlJobManager {
 	 */
 	private void loadJob(File dir) {
 		File jobConfig = new File(dir, "config.xml");
-		CrawlJob job = new CrawlJobFactory().makeJob(this, jobConfig);
+		CrawlJob job = new CrawlJobFactory(null).makeJob(this, jobConfig);
 		putJob(job.getName(), job);
 	}
 	
@@ -102,10 +113,10 @@ public class CrawlJobManager {
 	 * @return
 	 */
 	public CrawlJob makeNewJob(Map<String, Object> configs){
-		CrawlJobFactory factory = new CrawlJobFactory();
-		File jobDir = factory.makedir(jobPath);
-		File config = factory.makeConfigXml(jobDir,configs);
-		return factory.makeJob(this, config);
+		CrawlJobFactory factory = new CrawlJobFactory(configs);
+		File configFile = factory.makeConfigXml(factory.makedir(jobPath));
+		CrawlJob job = factory.makeJob(this, configFile);
+		return job;
 	}
 	
 	/**
