@@ -7,15 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.omg.PortableServer.POA;
-
 import com.hetzer.crawlite.exception.OverFlowException;
 import com.hetzer.crawlite.framework.CThread;
 import com.hetzer.crawlite.framework.CThreadPool;
 import com.hetzer.crawlite.framework.Processor;
 import com.hetzer.crawlite.job.CrawlJob;
 import com.hetzer.crawlite.job.CrawlJobFactory;
-import com.hetzer.crawlite.mock.MockCThreadPool;
 import com.hetzer.crawlite.mock.MockProcessor;
 import com.hetzer.crawlite.thread.GxyCThreadPool;
 

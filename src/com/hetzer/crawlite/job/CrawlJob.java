@@ -1,5 +1,6 @@
 package com.hetzer.crawlite.job;
 
+import java.io.File;
 import java.util.Random;
 
 import com.hetzer.crawlite.CrawlJobManager;
@@ -22,6 +23,7 @@ public class CrawlJob {
 	private String name;
 	private int THREAD_NUM = 1;
 	private CThread[] threads;
+	private File directory;
 	
 	public CrawlJob(CrawlJobManager cjm) {
 		this(H2UrlProvider.instance(),new MockProcesserChain());
@@ -79,5 +81,13 @@ public class CrawlJob {
 
 	public void setThreadNum(Integer integer) {
 		this.THREAD_NUM = integer;
+	}
+
+	public File getDirectory() {
+		return directory;
+	}
+
+	public void setDirectory(File directory) {
+		this.directory = directory;
 	}
 }

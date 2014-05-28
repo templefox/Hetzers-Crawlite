@@ -58,6 +58,7 @@ public class CrawlJobFactory {
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
+		job.setDirectory(new File(jobsDir));
 		job.setName(jobName);
 		job.setSeeds(new String[] { "a", "b", "c", "d" });
 		return job;
