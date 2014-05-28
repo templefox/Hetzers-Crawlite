@@ -76,4 +76,8 @@ public class CrawlJob {
 	public void addProcessor(Processor processor){
 		processerChain.add(processor);
 	}
+
+	public void setThreadNum(Integer integer) {
+		this.THREAD_NUM = integer;
+	}
 }
