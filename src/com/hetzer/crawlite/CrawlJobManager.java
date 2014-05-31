@@ -15,7 +15,12 @@ import com.hetzer.crawlite.job.CrawlJob;
 import com.hetzer.crawlite.job.CrawlJobFactory;
 import com.hetzer.crawlite.mock.MockProcessor;
 import com.hetzer.crawlite.processers.Download_CSS;
+import com.hetzer.crawlite.processers.Download_HTML;
+import com.hetzer.crawlite.processers.Download_JavaScript;
+import com.hetzer.crawlite.processers.Extractor_Implementation;
 import com.hetzer.crawlite.processers.Write_CSS;
+import com.hetzer.crawlite.processers.Write_HTML;
+import com.hetzer.crawlite.processers.Write_JavaScript;
 import com.hetzer.crawlite.thread.GxyCThreadPool;
 
 /**
@@ -48,24 +53,7 @@ public class CrawlJobManager {
 		initThreadPool();
 
 		CrawlJob job1 = makeTestJob("TestJob1");
-		CrawlJob job2 = makeTestJob("TestJob2");
-
 		startCrawlers(new String[] {});
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(30000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				CrawlJob job11 = makeTestJob("TestJob11");
-				CrawlJob job22 = makeTestJob("TestJob22");
-				startCrawlers(job11.getName(),job22.getName());
-			}
-		}).start();
 	}
 
 	private CrawlJob makeTestJob(String name) {
@@ -75,11 +63,13 @@ public class CrawlJobManager {
 		map.put("RetryTimes", 3);
 		List<Class<? extends Processor>> list = new ArrayList<Class<? extends Processor>>();
 		list.add(MockProcessor.class);
-		list.add(MockProcessor.class);
-		list.add(MockProcessor.class);
+		list.add(Write_HTML.class);
+		list.add(Download_HTML.class);
+		list.add(Extractor_Implementation.class);
 		map.put("processorList", list);
 		CrawlJob job = makeNewJob(map);
 		putJob(job.getName(), job);
+		job.setSeeds(new String[] { "http://www.163.com" });
 		return job;
 	}
 

@@ -36,6 +36,7 @@ public class CrawlJobFactory {
 	private String jobsDir;
 	private String jobName = "";
 	private File config;
+	private File jobFile;
 	private Map<String, Object> map;
 
 	public CrawlJobFactory(Map<String, Object> map) {
@@ -58,7 +59,7 @@ public class CrawlJobFactory {
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
-		job.setDirectory(new File(jobsDir));
+		job.setDirectory(jobFile);
 		job.setName(jobName);
 		return job;
 	}
@@ -209,9 +210,8 @@ public class CrawlJobFactory {
 		this.jobsDir = jobsDir;
 		File dir = new File(jobsDir);
 		dir.mkdir();
-		File theJob = new File(dir, jobName);
-		theJob.mkdir();
-
-		return theJob;
+		jobFile = new File(dir, jobName);
+		jobFile.mkdir();
+		return jobFile;
 	}
 }

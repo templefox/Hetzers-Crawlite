@@ -1,20 +1,17 @@
 package com.hetzer.crawlite.processers;
 
-
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
 import com.hetzer.crawlite.datamodel.CrawlableURL;
-
+import com.hetzer.crawlite.job.CrawlJob;
+import com.hetzer.crawlite.mock.MockResource;
 
 public class Extractor_Implementation extends AbstractExtractor {
-	public boolean Extract(CrawlableURL source) {
-		String []urlstock = new String[300];
+	public boolean Extract(CrawlableURL source,CrawlJob crawlJob) {
+		String[] urlstock = new String[300000];
 		// String regular_css="<link rel=\"stylesheet\" href=\"(.*?)\".*?";
 		// Map<String, String> url_stock;
 		if (source.getWebsource() != null) {
@@ -27,9 +24,9 @@ public class Extractor_Implementation extends AbstractExtractor {
 			int i_css = 0;
 			while (m_css.find()) {
 				// source.setUrl_stockmap.put("JS_URL"+i_css, m_css.group(1));
-//				source.getUrl_stockMap().put(
-//						"URL" + source.getUrlnum() + i_css, m_css.group(1));
-				urlstock[i_css]=m_css.group(1);
+				// source.getUrl_stockMap().put(
+				// "URL" + source.getUrlnum() + i_css, m_css.group(1));
+				urlstock[i_css] = m_css.group(1);
 				i_css++;
 			}
 			source.setUrlnum(i_css);
@@ -50,16 +47,17 @@ public class Extractor_Implementation extends AbstractExtractor {
 			Matcher m_img;
 			p_img = Pattern.compile(regular_img);
 			m_img = p_img.matcher(temp);
-			int img_initial =source.getUrlnum();
+			int img_initial = source.getUrlnum();
 			while (m_img.find()) {
-//				source.getUrl_stockMap().put(
-//						"URL" + source.getUrlnum() + i_img, m_img.group(1));
-				urlstock[img_initial+i_img]=m_img.group(1);
+				// source.getUrl_stockMap().put(
+				// "URL" + source.getUrlnum() + i_img, m_img.group(1));
+				urlstock[img_initial + i_img] = m_img.group(1);
+				
 				i_img++;
 			}
 			// source.set_img_url_stockmap(img_url_stock);
 			// source.setIMG_I(i_img);
-			
+
 			source.setUrlnum(i_img + source.getUrlnum());
 
 			// Map<String, String> map_js_url = new HashMap<String, String>();
@@ -72,40 +70,38 @@ public class Extractor_Implementation extends AbstractExtractor {
 			p_js = Pattern.compile(regular_js);
 			m_js = p_js.matcher(temp1);
 			// String [] store_js = new String[30];
-			int js_initial =source.getUrlnum();
+			int js_initial = source.getUrlnum();
 			int i_js = 0;
 			while (m_js.find()) {
-//				source.getUrl_stockMap().put("URL" + source.getUrlnum() + i_js,
-//						m_js.group(1));
-				urlstock[i_js+js_initial]=m_js.group(1);
+				// source.getUrl_stockMap().put("URL" + source.getUrlnum() +
+				// i_js,
+				// m_js.group(1));
+				urlstock[i_js + js_initial] = m_js.group(1);
 				i_js++;
 			}
 			source.setUrlnum(i_js + source.getUrlnum());
-			
+
 			String regular_html = User_Regular_HTML.Regular_Fun();
 			Pattern p_html;
 			Matcher m_html;
 			p_html = Pattern.compile(regular_html);
 			m_html = p_html.matcher(source.getWebsource());
-			int html_initial =source.getUrlnum();
+			int html_initial = source.getUrlnum();
 			// String [] store_css = new String[30];
 			int i_html = 0;
 			while (m_html.find()) {
 				// source.setUrl_stockmap.put("JS_URL"+i_css, m_css.group(1));
-//				source.getUrl_stockMap().put(
-//						"URL" + source.getUrlnum() + i_css, m_css.group(1));
-				urlstock[html_initial+i_html]=m_html.group(1);
+				// source.getUrl_stockMap().put(
+				// "URL" + source.getUrlnum() + i_css, m_css.group(1));
+				urlstock[html_initial + i_html] = m_html.group(1);
+				crawlJob.getUrlProvider().add(new MockResource(urlstock[html_initial + i_html]),crawlJob);
 				i_html++;
 			}
 			source.setUrlnum(html_initial + source.getUrlnum());
 		}
-		
+
 		source.setUrlstock(urlstock);
-		for(int i=0;i<source.getUrlnum();i++)
-		{
-		System.out.println(urlstock[i]);
-		}
-		
+
 		return true;
 
 	}
