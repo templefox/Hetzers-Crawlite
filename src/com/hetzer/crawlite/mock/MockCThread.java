@@ -45,7 +45,7 @@ public class MockCThread implements CThread {
 	private void process() {
 		for (Iterator iterator = processerChain.iterator(); iterator.hasNext();) {
 			Processor processor = (Processor) iterator.next();
-			processor.process(current);
+			processor.process(current, crawlJob);
 
 		}
 	}
