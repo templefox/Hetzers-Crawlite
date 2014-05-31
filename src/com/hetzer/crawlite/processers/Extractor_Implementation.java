@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
 
-public class Extractor_Implementation extends Extractor_Abstract {
-	public void doit(CrawlableURL source) {
+public class Extractor_Implementation extends AbstractExtractor {
+	public boolean Extract(CrawlableURL source) {
 		String []urlstock = new String[300];
 		// String regular_css="<link rel=\"stylesheet\" href=\"(.*?)\".*?";
 		// Map<String, String> url_stock;
@@ -105,6 +105,8 @@ public class Extractor_Implementation extends Extractor_Abstract {
 		{
 		System.out.println(urlstock[i]);
 		}
+		
+		return true;
 
 	}
 

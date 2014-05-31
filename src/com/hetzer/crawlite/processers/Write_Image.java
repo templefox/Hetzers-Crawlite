@@ -8,7 +8,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class Write_Image extends Write_Abstract {
+public class Write_Image extends AbstractWrite {
 	public void doit(CrawlableURL source) {
 		if(source.getURL().matches(".*?gif")||source.getURL().matches(".*?png")||source.getURL().matches(".*?jpg")||source.getURL().matches(".*?gif"))
 		{

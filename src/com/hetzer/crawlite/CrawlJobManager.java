@@ -14,6 +14,8 @@ import com.hetzer.crawlite.framework.Processor;
 import com.hetzer.crawlite.job.CrawlJob;
 import com.hetzer.crawlite.job.CrawlJobFactory;
 import com.hetzer.crawlite.mock.MockProcessor;
+import com.hetzer.crawlite.processers.Download_CSS;
+import com.hetzer.crawlite.processers.Write_CSS;
 import com.hetzer.crawlite.thread.GxyCThreadPool;
 
 /**
