@@ -48,24 +48,45 @@ public class CrawlJobManager {
 		loadJobs();
 		initThreadPool();
 
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("name", "test job");
+		CrawlJob job1 = makeTestJob("TestJob1");
+		CrawlJob job2 = makeTestJob("TestJob2");
+
+		startCrawlers(new String[] {});
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(30000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				CrawlJob job11 = makeTestJob("TestJob11");
+				CrawlJob job22 = makeTestJob("TestJob22");
+				startCrawlers(job11.getName(),job22.getName());
+			}
+		}).start();
+	}
+
+	private CrawlJob makeTestJob(String name) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("name", name);
 		map.put("ThreadNum", 4);
+		map.put("RetryTimes", 3);
 		List<Class<? extends Processor>> list = new ArrayList<Class<? extends Processor>>();
 		list.add(MockProcessor.class);
 		list.add(MockProcessor.class);
 		list.add(MockProcessor.class);
 		map.put("processorList", list);
-		CrawlJob job =makeNewJob(map);
+		CrawlJob job = makeNewJob(map);
 		putJob(job.getName(), job);
-		
-		
-		startCrawlers(new String[] {job.getName()});
+		return job;
 	}
 
 	private void loadConfigs(Properties properties) {
 		jobPath = properties.getProperty("jobPath", "jobs");
-		MAX_THREAD = 10;
+		MAX_THREAD = new Integer(properties.getProperty("maxThread", "200"));
 		System.out.println("loadConfigs");
 	}
 
@@ -82,23 +103,25 @@ public class CrawlJobManager {
 				loadJob(ajobDir);
 			}
 		} else {
-			//throw new IllegalStateException("jobDir is not a directory");
+			// throw new IllegalStateException("jobDir is not a directory");
 		}
 
-		//jobMap.put("test", new CrawlJobFactory().makeJob(this));
+		// jobMap.put("test", new CrawlJobFactory().makeJob(this));
 	}
-	
+
 	/**
 	 * Load an exist job from target directory. Make instance and put into map.
-	 * @param dir represent a job, which contains config.xml.
+	 * 
+	 * @param dir
+	 *            represent a job, which contains config.xml.
 	 */
 	private void loadJob(File dir) {
 		File jobConfig = new File(dir, "config.xml");
 		CrawlJob job = new CrawlJobFactory(null).makeJob(this, jobConfig);
 		putJob(job.getName(), job);
 	}
-	
-	public void putJob(String name,CrawlJob job){
+
+	public void putJob(String name, CrawlJob job) {
 		jobMap.put(name, job);
 	}
 
@@ -108,17 +131,20 @@ public class CrawlJobManager {
 	}
 
 	/**
-	 * Make a new job. First make the directory and the config.xml according the "configs".
-	 * @param configs configuration of job.
+	 * Make a new job. First make the directory and the config.xml according the
+	 * "configs".
+	 * 
+	 * @param configs
+	 *            configuration of job.
 	 * @return
 	 */
-	public CrawlJob makeNewJob(Map<String, Object> configs){
+	public CrawlJob makeNewJob(Map<String, Object> configs) {
 		CrawlJobFactory factory = new CrawlJobFactory(configs);
 		File configFile = factory.makeConfigXml(factory.makedir(jobPath));
 		CrawlJob job = factory.makeJob(this, configFile);
 		return job;
 	}
-	
+
 	/**
 	 * @param name
 	 *            if null than start all.

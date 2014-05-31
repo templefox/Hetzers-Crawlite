@@ -106,6 +106,9 @@ public class CrawlJobFactory {
 		Element threadNumElement = root.element("ThreadNum");
 		job.setThreadNum(new Integer(threadNumElement.getText()));
 
+		Element retryTimesElement = root.element("RetryTimes");
+		job.setRetryTimes(new Integer(retryTimesElement.getText()));
+		
 		Element processorsElement = root.element("Processor");
 		Iterator iterator = processorsElement.elementIterator();
 		for (; iterator.hasNext();) {
@@ -169,6 +172,10 @@ public class CrawlJobFactory {
 		Element threadConfig = root.addElement("ThreadNum");
 		threadConfig.addAttribute("name", "ThreadNum");
 		threadConfig.setText(Integer.toString((int) map.get("ThreadNum")));
+		
+		Element retryTimes = root.addElement("RetryTimes");
+		retryTimes.addAttribute("name", "ThreadNum");
+		retryTimes.setText(Integer.toString((int) map.get("RetryTimes")));
 
 		Element processors = root.addElement("Processor");
 		List<Class<? extends Processor>> processorList = (List<Class<? extends Processor>>) map
