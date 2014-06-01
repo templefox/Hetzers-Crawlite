@@ -67,33 +67,10 @@ public class H2UrlProvider implements UrlProvider {
 		return hasNext;
 	}
 
-	@Override
-	public synchronized CrawlableURL next() {
-		Statement statement;
-		ResultSet result = null;
-		String url = null;
-		try {
-			statement = connection.createStatement();
-			result = statement
-					.executeQuery("select top 1 URL from TEST where ISDONE = false ");
-			if (result.next()) {
-				url = result.getString("URL");
-				int r = statement
-						.executeUpdate("update TEST SET ISDONE = 1 WHERE URL = '"
-								+ url + "';");
-				if (r == 0) {
-					throw new IllegalAccessError("Can't refresh");
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return new MockResource(url);
-	}
-
 	public synchronized CrawlableURL next(CrawlJob job) {
 		PreparedStatement statement1;
 		PreparedStatement statement2;
+		
 		ResultSet result = null;
 		String url = null;
 		try {
@@ -101,6 +78,7 @@ public class H2UrlProvider implements UrlProvider {
 							+ "and JOB = ?");
 			statement1.setString(1, job.getName());
 			result = statement1.executeQuery();
+			
 			if (result.next()) {
 				url = result.getString("URL");
 				statement2 = connection.prepareStatement("update TEST SET ISDONE = 1 WHERE URL = ? and JOB = ?");
@@ -118,64 +96,6 @@ public class H2UrlProvider implements UrlProvider {
 		return new MockResource(url);
 	}
 
-	@Override
-	public void remove() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean contains(Object o) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Iterator<CrawlableURL> iterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <T> T[] toArray(T[] a) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean add(CrawlableURL e) {
-		Statement stat;
-		int result = 0;
-		try {
-			stat = connection.createStatement();
-			result = stat.executeUpdate("insert into TEST VALUES ('"
-					+ e.getURL() + "',false)");
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		return result == 1 ? true : false;
-	}
-
 	public boolean add(CrawlableURL e, CrawlJob job) {
 		PreparedStatement preparedStatement;
 		int result = 0;
@@ -191,101 +111,6 @@ public class H2UrlProvider implements UrlProvider {
 		}
 
 		return result == 1 ? true : false;
-	}
-
-	@Override
-	public boolean remove(Object o) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean containsAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean addAll(Collection<? extends CrawlableURL> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean addAll(int index, Collection<? extends CrawlableURL> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean removeAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean retainAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public CrawlableURL get(int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public CrawlableURL set(int index, CrawlableURL element) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void add(int index, CrawlableURL element) {
-
-	}
-
-	@Override
-	public CrawlableURL remove(int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int indexOf(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int lastIndexOf(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public ListIterator<CrawlableURL> listIterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ListIterator<CrawlableURL> listIterator(int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<CrawlableURL> subList(int fromIndex, int toIndex) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

@@ -9,12 +9,13 @@ import com.hetzer.crawlite.mock.MockResource;
 
 public class Extract_CSS extends AbstractExtractor {
 	public boolean Extract(CrawlableURL source, CrawlJob crawlJob) {
-		if (source.getWebsource() != null) {
+		String webSource = source.getString(CrawlableURL.WEB_SOURCE);
+		if (webSource != null) {
 			String regular_css = User_Regular_CSS.Regular_CSS_Fun();
 			Pattern p_css;
 			Matcher m_css;
 			p_css = Pattern.compile(regular_css);
-			m_css = p_css.matcher(source.getWebsource());
+			m_css = p_css.matcher(webSource);
 			int i_css = 0;
 			while (m_css.find()) {
 				crawlJob.getUrlProvider().add(new MockResource(m_css.group(1)),

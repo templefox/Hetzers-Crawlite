@@ -15,6 +15,7 @@ import com.hetzer.crawlite.job.CrawlJob;
 import com.hetzer.crawlite.job.CrawlJobFactory;
 import com.hetzer.crawlite.mock.MockProcessor;
 import com.hetzer.crawlite.processers.Download_CSS;
+import com.hetzer.crawlite.processers.Extract_HTML;
 import com.hetzer.crawlite.processers.Write_CSS;
 import com.hetzer.crawlite.processers.Download_CSS;
 import com.hetzer.crawlite.processers.Download_HTML;
@@ -65,17 +66,12 @@ public class CrawlJobManager {
 		
 		map.put("RetryTimes", 3);
 		List<Class<? extends Processor>> list = new ArrayList<Class<? extends Processor>>();
-		list.add(Write_CSS.class);
-		list.add(Download_CSS.class);
-		
 		list.add(MockProcessor.class);
 		list.add(Write_HTML.class);
 		list.add(Download_HTML.class);
-		list.add(Extractor_Implementation.class);
+		list.add(Extract_HTML.class);
 		map.put("processorList", list);
 		CrawlJob job = makeNewJob(map);
-		job.setSeeds(new String[]{"http://static.soku.com/v1.0.0753/soku/inthesky/giantstar/css/s_comm.css"});
-		
 		putJob(job.getName(), job);
 		job.setSeeds(new String[] { "http://www.163.com" });
 		return job;

@@ -7,6 +7,7 @@ import java.net.URL;
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
 public class Write_HTML extends AbstractWrite {
+
 	public void doit(CrawlableURL source) {
 		if (((source.getURL().matches("http.*?com.*?"))
 				|| (source.getURL().matches(".*?net.*?"))
@@ -28,7 +29,8 @@ public class Write_HTML extends AbstractWrite {
 					sb.append(s);
 				}
 				br.close();
-				source.setwebsource(sb.toString());
+				//XXX source.setwebsource(sb.toString());
+				source.putString(CrawlableURL.WEB_SOURCE, sb.toString());
 				System.out.println("Websource write Successfully");
 			} catch (Exception e) {
 				e.printStackTrace();

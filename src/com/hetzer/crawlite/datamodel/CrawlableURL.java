@@ -7,11 +7,8 @@ import java.util.Set;
 
 public interface CrawlableURL {
 
+	public static final String WEB_SOURCE = "webSource";
 	public String getURL(); // »ñÈ¡URL
-
-	public void setwebsource(String WEBSOURCE);
-
-	public String getWebsource();
 
 	public Map<String, byte[]> getmap();// Í¼Æ¬Á÷
 
@@ -40,5 +37,17 @@ public interface CrawlableURL {
 	public boolean isIMG_Flag();
 
 	public void setIMG_Flag(boolean flag);
+
+	public abstract byte[] putBoolean(String key, boolean value);
+
+	public abstract boolean getBoolean(String key);
+
+	public abstract byte[] putString(String key, String value);
+
+	public abstract String getString(String key);
+
+	public abstract byte[] putBytes(String key, byte[] value);
+
+	public abstract byte[] getBytes(String key);
 
 }

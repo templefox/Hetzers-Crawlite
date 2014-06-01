@@ -23,6 +23,8 @@ public class GxyCThread extends Thread implements CThread {
 	private boolean isWait = true;
 	private boolean isGone = false;
 	private boolean ischosen = false;
+	private static final long SLEEP_TIME = 500;
+	private long sleepTime = SLEEP_TIME;
 	CrawlJob crawlJob;
 	ProcesserChain processerChain;
 	CrawlableURL current;
@@ -100,19 +102,23 @@ public class GxyCThread extends Thread implements CThread {
 		while (true) {
 			current = (CrawlableURL) provider.next(crawlJob);
 			if (current.getURL() == null) {
-				if (!crawlJob.checkCanRetry()) {
-					crawlJob.stop();
-					
-					break;
+				try {
+					sleep(sleepTime);
+					sleepTime <<=1;
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				continue;
+			} else {
+				sleepTime = SLEEP_TIME;
+				System.out.println(current.getURL() + " " + crawlJob.getName()
+						+ " " + threadname);
+
+				process();
+
+				current = null;
 			}
-			System.out.println(current.getURL() + " " + crawlJob.getName()
-					+ " " + threadname);
 
-			process();
-
-			current = null;
 		}
 
 	}
@@ -120,7 +126,7 @@ public class GxyCThread extends Thread implements CThread {
 	private void process() {
 		for (Iterator iterator = processerChain.iterator(); iterator.hasNext();) {
 			Processor processor = (Processor) iterator.next();
-			processor.process(current,crawlJob);
+			processor.process(current, crawlJob);
 
 		}
 	}

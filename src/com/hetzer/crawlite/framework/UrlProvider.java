@@ -14,8 +14,9 @@ import com.hetzer.crawlite.job.CrawlJob;
  *     <li>In what order unprocessed URIs will be processed
  * </ul>
  */
-public interface UrlProvider extends Iterator<CrawlableURL>,List<CrawlableURL>{
+public interface UrlProvider {
 	public void initialize();
 	public CrawlableURL next(CrawlJob job);
+	public boolean hasNext();
 	public boolean add(CrawlableURL e, CrawlJob job);
 }

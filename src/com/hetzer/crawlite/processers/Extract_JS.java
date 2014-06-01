@@ -9,13 +9,14 @@ import com.hetzer.crawlite.mock.MockResource;
 
 public class Extract_JS extends AbstractExtractor {
 	public boolean Extract(CrawlableURL source, CrawlJob crawlJob) {
-		if (source.getWebsource() != null) {
+		String webSource = source.getString(CrawlableURL.WEB_SOURCE);
+if (webSource != null) {
 			String regular_js = User_Regular_JS.Regular_JS_Fun();
-			String temp1 = source.getWebsource();
+			
 			Pattern p_js;
 			Matcher m_js;
 			p_js = Pattern.compile(regular_js);
-			m_js = p_js.matcher(temp1);
+			m_js = p_js.matcher(webSource);
 			int i_js = 0;
 			while (m_js.find()) {
 				crawlJob.getUrlProvider().add(new MockResource(m_js.group(1)),

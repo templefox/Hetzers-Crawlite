@@ -28,17 +28,6 @@ public class MockResource implements CrawlableURL {
 	}
 
 	@Override
-	public void setwebsource(String WEBSOURCE) {
-		// TODO Auto-generated method stub
-		this.websource = WEBSOURCE;
-	}
-
-	@Override
-	public String getWebsource() {
-		return this.websource;
-	}
-
-	@Override
 	public Map<String, byte[]> getmap() {
 		return map;
 	}
@@ -110,6 +99,31 @@ public class MockResource implements CrawlableURL {
 	@Override
 	public void setCSS_Flag(boolean cSS_Flag) {
 		CSS_Flag = cSS_Flag;
+	}
+
+	public byte[] putBoolean(String key, boolean value) {
+		return null;
+	}
+
+	public boolean getBoolean(String key) {
+		return false;
+	}
+
+	public byte[] putString(String key, String value) {
+		websource = value;
+		return null;
+	}
+
+	public String getString(String key) {
+		return websource;
+	}
+
+	public byte[] putBytes(String key, byte[] value) {
+		return null;
+	}
+
+	public byte[] getBytes(String key) {
+		return null;
 	}
 
 }

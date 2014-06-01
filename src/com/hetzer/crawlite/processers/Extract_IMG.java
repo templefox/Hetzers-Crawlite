@@ -9,15 +9,14 @@ import com.hetzer.crawlite.mock.MockResource;
 
 public class Extract_IMG extends AbstractExtractor {
 	public boolean Extract(CrawlableURL source, CrawlJob crawlJob) {
-		if (source.getWebsource() != null) {
-			String temp;
+		String webSource = source.getString(CrawlableURL.WEB_SOURCE);
+if (webSource != null) {
 			int i_img = 0;
-			temp = source.getWebsource();
 			String regular_img = User_Regular_IMG.Regular_Fun(); // Regular_FunÎª¾²Ì¬º¯Êý
 			Pattern p_img;
 			Matcher m_img;
 			p_img = Pattern.compile(regular_img);
-			m_img = p_img.matcher(temp);
+			m_img = p_img.matcher(webSource);
 			while (m_img.find()) {
 				// urlstock[img_initial + i_img] = m_img.group(1);
 				crawlJob.getUrlProvider().add(new MockResource(m_img.group(1)),
