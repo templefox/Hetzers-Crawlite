@@ -6,16 +6,15 @@ import com.hetzer.crawlite.job.CrawlJob;
 
 public abstract class AbstractWrite implements Processor {
 	@Override
-	public boolean process(CrawlableURL source,CrawlJob crawlJob){
+	public boolean process(CrawlableURL source, CrawlJob crawlJob) {
 		doit(source);
-		if(source.getURL()!=null)
-		{
+		if (source.getURL() != null) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
+
 	public abstract void doit(CrawlableURL url);
 
 }

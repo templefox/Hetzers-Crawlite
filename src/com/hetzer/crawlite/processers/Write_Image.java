@@ -10,29 +10,23 @@ import com.hetzer.crawlite.datamodel.CrawlableURL;
 
 public class Write_Image extends AbstractWrite {
 	public void doit(CrawlableURL source) {
-		if(source.getURL().matches(".*?gif")||source.getURL().matches(".*?png")||source.getURL().matches(".*?jpg")||source.getURL().matches(".*?gif"))
-		{
-		//int download_count = 0;
-		Map<String, byte[]> map = new HashMap<String, byte[]>();
-		//Map<String, String> map_img_url = source.getmap_img_url_stockMap();
-		try {
-			//while (download_count < source.getIMG_I()) {
+		if (source.getURL().matches(".*?gif")
+				|| source.getURL().matches(".*?png")
+				|| source.getURL().matches(".*?jpg")) {
+			Map<String, byte[]> map = new HashMap<String, byte[]>();
+			try {
 				HttpClient client = new HttpClient();
 				GetMethod get = new GetMethod(source.getURL());
 				client.executeMethod(get);
 				map.put("pc1", get.getResponseBody());
-				//download_count++;
-				source.setIMG_I(1);
-			//}
-			source.setmap(map);
-			System.out.println("IMG Write Successfully, " + source.getURL());
+				source.setIMG_Flag(true);
+				source.setmap(map);
+				System.out
+						.println("IMG Write Successfully, " + source.getURL());
 
-		} catch (Exception e) {
-			// e.printStackTrace();
-//			System.out.println("Failure happens at"
-//					+ source.IMGurlstock[download_count]);
-			System.out.println("IMG Write Fail");
-		}
+			} catch (Exception e) {
+				System.out.println("IMG Write Fail");
+			}
 		}
 	}
 

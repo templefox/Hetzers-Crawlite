@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<CrawlJob name="test job" class="com.hetzer.crawlite.job.CrawlJob">
-  <ThreadNum name="ThreadNum">4</ThreadNum>
-  <Processor>
-    <ProcessorObject name="Write_CSS" class="com.hetzer.crawlite.processers.Write_CSS"/>
-    <ProcessorObject name="Download_CSS" class="com.hetzer.crawlite.processers.Download_CSS"/>
-  </Processor>
-</CrawlJob>

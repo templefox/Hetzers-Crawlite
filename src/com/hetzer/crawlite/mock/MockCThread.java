@@ -109,7 +109,7 @@ public class MockCThread implements CThread {
 	}
 
 	@Override
-	public void jobRecle() {
+	public void jobRecycle() {
 		// TODO Auto-generated method stub
 
 	}

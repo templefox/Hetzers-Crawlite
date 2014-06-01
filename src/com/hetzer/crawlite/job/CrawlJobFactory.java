@@ -36,6 +36,7 @@ public class CrawlJobFactory {
 	private String jobsDir;
 	private String jobName = "";
 	private File config;
+	private File jobFile;
 	private Map<String, Object> map;
 
 	public CrawlJobFactory(Map<String, Object> map) {
@@ -58,7 +59,7 @@ public class CrawlJobFactory {
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
-		job.setDirectory(new File(jobsDir));
+		job.setDirectory(jobFile);
 		job.setName(jobName);
 		return job;
 	}
@@ -106,6 +107,9 @@ public class CrawlJobFactory {
 		Element threadNumElement = root.element("ThreadNum");
 		job.setThreadNum(new Integer(threadNumElement.getText()));
 
+		Element retryTimesElement = root.element("RetryTimes");
+		job.setRetryTimes(new Integer(retryTimesElement.getText()));
+		
 		Element processorsElement = root.element("Processor");
 		Iterator iterator = processorsElement.elementIterator();
 		for (; iterator.hasNext();) {
@@ -169,6 +173,10 @@ public class CrawlJobFactory {
 		Element threadConfig = root.addElement("ThreadNum");
 		threadConfig.addAttribute("name", "ThreadNum");
 		threadConfig.setText(Integer.toString((int) map.get("ThreadNum")));
+		
+		Element retryTimes = root.addElement("RetryTimes");
+		retryTimes.addAttribute("name", "ThreadNum");
+		retryTimes.setText(Integer.toString((int) map.get("RetryTimes")));
 
 		Element processors = root.addElement("Processor");
 		List<Class<? extends Processor>> processorList = (List<Class<? extends Processor>>) map
@@ -202,9 +210,8 @@ public class CrawlJobFactory {
 		this.jobsDir = jobsDir;
 		File dir = new File(jobsDir);
 		dir.mkdir();
-		File theJob = new File(dir, jobName);
-		theJob.mkdir();
-
-		return theJob;
+		jobFile = new File(dir, jobName);
+		jobFile.mkdir();
+		return jobFile;
 	}
 }

@@ -2,6 +2,7 @@ package com.hetzer.crawlite.framework.urlProvider;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -85,25 +86,27 @@ public class H2UrlProvider implements UrlProvider {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return new MockResource(url);
 	}
 
 	public synchronized CrawlableURL next(CrawlJob job) {
-		Statement statement;
+		PreparedStatement statement1;
+		PreparedStatement statement2;
 		ResultSet result = null;
 		String url = null;
 		try {
-			statement = connection.createStatement();
-			result = statement
-					.executeQuery("select top 1 URL from TEST where ISDONE = false "+"and JOB = '" + job.getName() + "';");
+			statement1 = connection.prepareStatement("select top 1 URL from TEST where ISDONE = false "
+							+ "and JOB = ?");
+			statement1.setString(1, job.getName());
+			result = statement1.executeQuery();
 			if (result.next()) {
 				url = result.getString("URL");
-				int r = statement
-						.executeUpdate("update TEST SET ISDONE = 1 WHERE URL = '"
-								+ url + "' and JOB = '" + job.getName() + "';");
+				statement2 = connection.prepareStatement("update TEST SET ISDONE = 1 WHERE URL = ? and JOB = ?");
+				statement2.setString(1, url);
+				statement2.setString(2, job.getName());
+				int r = statement2.executeUpdate();
 				if (r == 0) {
 					throw new IllegalAccessError("Can't refresh");
 				}
@@ -174,12 +177,14 @@ public class H2UrlProvider implements UrlProvider {
 	}
 
 	public boolean add(CrawlableURL e, CrawlJob job) {
-		Statement stat;
+		PreparedStatement preparedStatement;
 		int result = 0;
 		try {
-			stat = connection.createStatement();
-			result = stat.executeUpdate("insert into TEST SET URL = '"
-					+ e.getURL() + "' ,  ISDONE = 'false' ,  JOB = '" + job.getName() + "'");
+			preparedStatement = connection
+					.prepareStatement("insert into TEST SET URL = ? , ISDONE = 'false' , JOB = ?");
+			preparedStatement.setString(1, e.getURL());
+			preparedStatement.setString(2, job.getName());
+			result = preparedStatement.executeUpdate();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

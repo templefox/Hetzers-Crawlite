@@ -23,7 +23,7 @@ public interface CThread {
 	
     public boolean getAbandon();
 	
-	public void jobRecle();
+	public void jobRecycle();
 
 	public boolean getRunTime();
 
