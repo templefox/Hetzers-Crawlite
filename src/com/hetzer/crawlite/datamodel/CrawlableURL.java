@@ -22,7 +22,7 @@ public interface CrawlableURL {
 
 	public abstract Boolean putBoolean(String key, boolean value);
 
-	public abstract boolean getBoolean(String key);
+	public abstract Boolean getBoolean(String key);
 
 	public abstract String putString(String key, String value);
 

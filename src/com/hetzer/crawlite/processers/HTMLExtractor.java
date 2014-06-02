@@ -20,11 +20,20 @@ public class HTMLExtractor extends AbstractExtractor {
 			int i_html = 0;
 			source.setDepth(i_html + source.getDepth());
 			while (m_html.find()) {
-				CrawlableURL object = CrawlJobManager.makeUrlObject(m_html.group(1));
-				object.setDepth(source.getDepth()+1);
-				crawlJob.getUrlProvider()
-						.add(object,
-								crawlJob,object.getDepth());
+				String temp = m_html.group(1);
+				if (temp.matches("/.*?")) {
+					temp = source.getURL() + temp;
+					CrawlableURL object = CrawlJobManager.makeUrlObject(temp);
+					object.setDepth(source.getDepth() + 1);
+					crawlJob.getUrlProvider().add(object, crawlJob,
+							object.getDepth());
+				} else {
+					CrawlableURL object = CrawlJobManager.makeUrlObject(m_html
+							.group(1));
+					object.setDepth(source.getDepth() + 1);
+					crawlJob.getUrlProvider().add(object, crawlJob,
+							object.getDepth());
+				}
 			}
 		}
 		return true;

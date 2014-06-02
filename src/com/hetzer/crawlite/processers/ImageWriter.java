@@ -7,18 +7,14 @@ import java.util.Map;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class ImageDownloadr extends AbstractWriter {
+public class ImageWriter extends AbstractWriter {
 	public boolean Download(CrawlableURL source, File dir) {
 		if (source.getBoolean(CrawlableURL.IMG)) {
 			try {
 				if (source.getURL().matches("http.*?")) {
 					File file = new File(dir, "img_src");
 					file.mkdir();
-					String name = source.getURL().replace('/', '_')
-							.replace(':', '_').replace('?', '_')
-							.replace('"', '_').replace('<', '_')
-							.replace('>', '_').replace('|', '_')
-							.replace('*', '_').replace('"', '_');
+					String name = source.getURL().replaceAll("/|:|\\?", "_");
 					System.out.println(name);
 					File d = new File(file, name);
 					d.mkdir();

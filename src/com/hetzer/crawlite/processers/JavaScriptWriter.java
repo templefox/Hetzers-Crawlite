@@ -12,10 +12,7 @@ public class JavaScriptWriter extends AbstractWriter {
 			try {
 				File file = new File(dir, "js_src");
 				file.mkdir();
-				String name = source.getURL().replace('/', '_')
-						.replace(':', '_').replace('?', '_').replace('"', '_')
-						.replace('<', '_').replace('>', '_').replace('|', '_')
-						.replace('*', '_').replace('"', '_');
+				String name = source.getURL().replaceAll("/|:|\\?", "_");
 				System.out.println(name);
 				File d = new File(file, name);
 				d.mkdir();
@@ -27,7 +24,7 @@ public class JavaScriptWriter extends AbstractWriter {
 				System.out.println("Javascript Write Fail");
 			}
 		}
-		source.putBoolean(CrawlableURL.JS, false);
+		
 		return true;
 	}
 

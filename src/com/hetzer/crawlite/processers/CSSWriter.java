@@ -14,10 +14,7 @@ public class CSSWriter extends AbstractWriter {
 
 				File file = new File(dir, "css_src");
 				file.mkdir();
-				String name = source.getURL().replace('/', '_')
-						.replace(':', '_').replace('?', '_').replace('"', '_')
-						.replace('<', '_').replace('>', '_').replace('|', '_')
-						.replace('*', '_').replace('"', '_');
+				String name = source.getURL().replaceAll("/|:|\\?", "_");
 				System.out.println(name);
 				File d = new File(file, name);
 				d.mkdir();

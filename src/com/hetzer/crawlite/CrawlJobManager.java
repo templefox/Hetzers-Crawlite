@@ -18,11 +18,16 @@ import com.hetzer.crawlite.framework.Processor;
 import com.hetzer.crawlite.job.CrawlJob;
 import com.hetzer.crawlite.job.CrawlJobFactory;
 import com.hetzer.crawlite.mock.MockProcessor;
+import com.hetzer.crawlite.processers.CSSExtractr;
 import com.hetzer.crawlite.processers.CSSWriter;
 import com.hetzer.crawlite.processers.HTMLExtractor;
 import com.hetzer.crawlite.processers.CSSFetcher;
 import com.hetzer.crawlite.processers.CSSWriter;
-import com.hetzer.crawlite.processers.HTMLDownloadr;
+import com.hetzer.crawlite.processers.HTMLWriter;
+import com.hetzer.crawlite.processers.IMGExtractor;
+import com.hetzer.crawlite.processers.ImageWriter;
+import com.hetzer.crawlite.processers.ImageFetcher;
+import com.hetzer.crawlite.processers.JavaScriptExtractor;
 import com.hetzer.crawlite.processers.JavaScriptWriter;
 import com.hetzer.crawlite.processers.CSSFetcher;
 import com.hetzer.crawlite.processers.HTMLFetcher;
@@ -78,7 +83,7 @@ public class CrawlJobManager {
 		loadJobs();
 		initThreadPool();
 
-		CrawlJob job1 = makeTestJob("TestJob1");
+		CrawlJob job1 = makeTestJob("TestJob2");
 		startCrawlers(new String[] {});
 	}
 
@@ -91,12 +96,25 @@ public class CrawlJobManager {
 		List<Class<? extends Processor>> list = new ArrayList<Class<? extends Processor>>();
 		list.add(MockProcessor.class);
 		list.add(HTMLFetcher.class);
-		list.add(HTMLDownloadr.class);
+		list.add(HTMLWriter.class);
+		
+		list.add(ImageFetcher.class);
+		list.add(ImageWriter.class);
+		
+		list.add(CSSFetcher.class);
+		list.add(CSSWriter.class);
+		
+		list.add(JavaScriptFetcher.class);
+		list.add(JavaScriptWriter.class);
+		
 		list.add(HTMLExtractor.class);
+		list.add(CSSExtractr.class);
+		list.add(JavaScriptExtractor.class);
+		list.add(IMGExtractor.class);
 		map.put("processorList", list);
 		CrawlJob job = makeNewJob(map);
 		putJob(job.getName(), job);
-		job.setSeeds(new String[] { "http://www.163.com" });
+		job.setSeeds(new String[] { "http://www.163.com/" });
 		return job;
 	}
 

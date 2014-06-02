@@ -17,7 +17,7 @@ public class ImageFetcher extends AbstractFetcher {
 				HttpClient client = new HttpClient();
 				GetMethod get = new GetMethod(source.getURL());
 				client.executeMethod(get);
-				//XXX map.put("pc1", get.getResponseBody());
+				// XXX map.put("pc1", get.getResponseBody());
 				source.putBytes(CrawlableURL.IMG, get.getResponseBody());
 				source.putBoolean(CrawlableURL.IMG, true);
 				System.out
@@ -25,7 +25,11 @@ public class ImageFetcher extends AbstractFetcher {
 
 			} catch (Exception e) {
 				System.out.println("IMG Write Fail");
+				source.putBoolean(CrawlableURL.IMG, false);
 			}
+		} else {
+			source.putBoolean(CrawlableURL.IMG, false);
+
 		}
 	}
 

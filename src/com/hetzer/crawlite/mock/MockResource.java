@@ -45,7 +45,7 @@ public class MockResource implements CrawlableURL {
 		return null;
 	}
 
-	public boolean getBoolean(String key) {
+	public Boolean getBoolean(String key) {
 		return false;
 	}
 

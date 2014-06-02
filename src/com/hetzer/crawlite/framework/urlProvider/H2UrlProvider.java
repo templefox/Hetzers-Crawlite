@@ -49,7 +49,7 @@ public class H2UrlProvider implements UrlProvider {
 					user, password);
 			Statement stat = connection.createStatement();
 			stat.execute("DROP TABLE IF EXISTS TEST");
-			stat.execute("CREATE TABLE TEST(URL VARCHAR(255),ISDONE BOOLEAN,JOB VARCHAR(255),PIRORITY INTEGER,PRIMARY KEY(JOB,URL))");
+			stat.execute("CREATE TABLE TEST(URL VARCHAR(66535),ISDONE BOOLEAN,JOB VARCHAR(255),PIRORITY INTEGER,PRIMARY KEY(JOB,URL))");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

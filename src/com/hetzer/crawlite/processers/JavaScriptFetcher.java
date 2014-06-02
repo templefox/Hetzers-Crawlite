@@ -26,7 +26,11 @@ public class JavaScriptFetcher extends AbstractFetcher {
 				System.out.println("Javascript Write Successfully, ");
 			} catch (Exception e) {
 				System.out.println("Javascript Write Fail");
+				source.putBoolean(CrawlableURL.JS, false);
 			}
+		}
+		else {
+			source.putBoolean(CrawlableURL.JS, false);
 		}
 	}
 

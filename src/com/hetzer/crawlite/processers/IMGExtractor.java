@@ -20,12 +20,21 @@ public class IMGExtractor extends AbstractExtractor {
 			m_img = p_img.matcher(webSource);
 			source.setDepth(source.getDepth() + i_img);
 			while (m_img.find()) {
+				String temp = m_img.group(1);
+				if (temp.matches("/.*?")) {
+					temp = source.getURL() + temp;
+					CrawlableURL object = CrawlJobManager.makeUrlObject(temp);
+					object.setDepth(source.getDepth() + 1);
+					crawlJob.getUrlProvider().add(object, crawlJob,
+							object.getDepth());
+				} else {
 
-				CrawlableURL object = CrawlJobManager.makeUrlObject(m_img
-						.group(1));
-				object.setDepth(source.getDepth() + 1);
-				crawlJob.getUrlProvider().add(object, crawlJob,
-						object.getDepth());
+					CrawlableURL object = CrawlJobManager.makeUrlObject(m_img
+							.group(1));
+					object.setDepth(source.getDepth() + 1);
+					crawlJob.getUrlProvider().add(object, crawlJob,
+							object.getDepth());
+				}
 			}
 
 		}

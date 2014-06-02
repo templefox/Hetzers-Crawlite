@@ -27,7 +27,11 @@ public class CSSFetcher extends AbstractFetcher {
 				System.out.println("CSS Write Successfully");
 			} catch (Exception e) {
 				System.out.println("CSS Write Fail");
+				source.putBoolean(CrawlableURL.CSS, false);
 			}
+		}
+		else {
+			source.putBoolean(CrawlableURL.CSS, false);
 		}
 	}
 

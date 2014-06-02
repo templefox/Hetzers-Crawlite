@@ -73,7 +73,7 @@ public class Resource implements CrawlableURL {
 	}
 
 	@Override
-	public boolean getBoolean(String key) {
+	public Boolean getBoolean(String key) {
 		return getBoolMap().get(key);
 	}
 

@@ -18,11 +18,20 @@ public class CSSExtractr extends AbstractExtractor {
 			p_css = Pattern.compile(regular_css);
 			m_css = p_css.matcher(webSource);
 			while (m_css.find()) {
-				CrawlableURL object = CrawlJobManager.makeUrlObject(m_css.group(1));
-				object.setDepth(source.getDepth()+1);
-				crawlJob.getUrlProvider()
-						.add(object,
-								crawlJob,object.getDepth());
+				String temp = m_css.group(1);
+				if (temp.matches("/.*?")) {
+					temp = source.getURL() + temp;
+					CrawlableURL object = CrawlJobManager.makeUrlObject(temp);
+					object.setDepth(source.getDepth() + 1);
+					crawlJob.getUrlProvider().add(object, crawlJob,
+							object.getDepth());
+				} else {
+					CrawlableURL object = CrawlJobManager.makeUrlObject(m_css
+							.group(1));
+					object.setDepth(source.getDepth() + 1);
+					crawlJob.getUrlProvider().add(object, crawlJob,
+							object.getDepth());
+				}
 			}
 
 		}
