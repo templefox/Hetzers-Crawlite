@@ -8,19 +8,18 @@ import org.apache.commons.httpclient.methods.GetMethod;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class Write_Image extends AbstractWrite {
+public class ImageFetcher extends AbstractFetcher {
 	public void doit(CrawlableURL source) {
 		if (source.getURL().matches(".*?gif")
 				|| source.getURL().matches(".*?png")
 				|| source.getURL().matches(".*?jpg")) {
-			Map<String, byte[]> map = new HashMap<String, byte[]>();
 			try {
 				HttpClient client = new HttpClient();
 				GetMethod get = new GetMethod(source.getURL());
 				client.executeMethod(get);
-				map.put("pc1", get.getResponseBody());
-				source.setIMG_Flag(true);
-				source.setmap(map);
+				//XXX map.put("pc1", get.getResponseBody());
+				source.putBytes(CrawlableURL.IMG, get.getResponseBody());
+				source.putBoolean(CrawlableURL.IMG, true);
 				System.out
 						.println("IMG Write Successfully, " + source.getURL());
 

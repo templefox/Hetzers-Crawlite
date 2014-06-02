@@ -28,22 +28,12 @@ public class MockResource implements CrawlableURL {
 	}
 
 	@Override
-	public Map<String, byte[]> getmap() {
-		return map;
-	}
-
-	@Override
-	public void setmap(Map<String, byte[]> map) {
-		this.map = map;
-	}
-
-	@Override
-	public int getUrlnum() {
+	public int getDepth() {
 		return Urlnum;
 	}
 
 	@Override
-	public void setUrlnum(int urlnum) {
+	public void setDepth(int urlnum) {
 		Urlnum = urlnum;
 	}
 
@@ -51,57 +41,7 @@ public class MockResource implements CrawlableURL {
 		url = s;
 	}
 
-	@Override
-	public String getContent() {
-		return Content;
-	}
-
-	@Override
-	public void setContent(String content) {
-		Content = content;
-	}
-
-	@Override
-	public boolean isHTML_Flag() {
-		return HTML_Flag;
-	}
-
-	@Override
-	public void setHTML_Flag(boolean hTML_Flag) {
-		HTML_Flag = hTML_Flag;
-	}
-
-	@Override
-	public boolean isJS_Flag() {
-		return JS_Flag;
-	}
-
-	@Override
-	public void setJS_Flag(boolean jS_Flag) {
-		JS_Flag = jS_Flag;
-	}
-
-	@Override
-	public boolean isIMG_Flag() {
-		return IMG_Flag;
-	}
-
-	@Override
-	public void setIMG_Flag(boolean iMG_Flag) {
-		IMG_Flag = iMG_Flag;
-	}
-
-	@Override
-	public boolean isCSS_Flag() {
-		return CSS_Flag;
-	}
-
-	@Override
-	public void setCSS_Flag(boolean cSS_Flag) {
-		CSS_Flag = cSS_Flag;
-	}
-
-	public byte[] putBoolean(String key, boolean value) {
+	public Boolean putBoolean(String key, boolean value) {
 		return null;
 	}
 
@@ -109,7 +49,7 @@ public class MockResource implements CrawlableURL {
 		return false;
 	}
 
-	public byte[] putString(String key, String value) {
+	public String putString(String key, String value) {
 		websource = value;
 		return null;
 	}

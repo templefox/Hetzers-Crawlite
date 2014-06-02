@@ -27,18 +27,18 @@ public class CrawlJob {
 	private int retry = 0;
 	private CThread[] threads;
 	private File directory;
-	
+
 	public CrawlJob(CrawlJobManager cjm) {
-		this(H2UrlProvider.instance(),new MockProcesserChain());
+		this(H2UrlProvider.instance(), new MockProcesserChain());
 		this.crawlJobManager = cjm;
 	}
-	
-	public CrawlJob(UrlProvider urlProvider,ProcesserChain processerChain){
+
+	public CrawlJob(UrlProvider urlProvider, ProcesserChain processerChain) {
 		this.urlProvider = urlProvider;
 		this.processerChain = processerChain;
 	}
-	
-	public void initialize(){
+
+	public void initialize() {
 		try {
 			threads = crawlJobManager.apply(THREAD_NUM);
 		} catch (OverFlowException e) {
@@ -46,10 +46,11 @@ public class CrawlJob {
 		}
 		for (int i = 0; i < threads.length; i++) {
 			threads[i].insert(this);
-		}		
+		}
 	}
-	public void startCrawler(){
-		System.out.println("start "+this.getName());
+
+	public void startCrawler() {
+		System.out.println("start " + this.getName());
 		retry = 0;
 		for (int i = 0; i < threads.length; i++) {
 			threads[i].jobStart();
@@ -59,26 +60,26 @@ public class CrawlJob {
 	public String getName() {
 		return name;
 	}
-	
-	public void setName(String name){
+
+	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public void setSeeds(String[] seeds){
+
+	public void setSeeds(String[] seeds) {
 		for (String seed : seeds) {
-			urlProvider.add(new MockResource(seed),this);			
+			urlProvider.add(CrawlJobManager.makeUrlObject(seed), this,0);
 		}
 	}
 
 	public UrlProvider getUrlProvider() {
 		return urlProvider;
 	}
-	
-	public ProcesserChain getProcesserChain(){
+
+	public ProcesserChain getProcesserChain() {
 		return processerChain;
 	}
-	
-	public void addProcessor(Processor processor){
+
+	public void addProcessor(Processor processor) {
 		processerChain.add(processor);
 	}
 
@@ -95,9 +96,9 @@ public class CrawlJob {
 	public int getRetryTimes() {
 		return RETRY_TIMES;
 	}
-	
-	public boolean checkCanRetry(){
-		return retry++<=getRetryTimes();
+
+	public boolean checkCanRetry() {
+		return retry++ <= getRetryTimes();
 	}
 
 	public void setRetryTimes(int retryTimes) {

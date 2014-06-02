@@ -18,5 +18,5 @@ public interface UrlProvider {
 	public void initialize();
 	public CrawlableURL next(CrawlJob job);
 	public boolean hasNext();
-	public boolean add(CrawlableURL e, CrawlJob job);
+	public boolean add(CrawlableURL e, CrawlJob job, int pirority);
 }

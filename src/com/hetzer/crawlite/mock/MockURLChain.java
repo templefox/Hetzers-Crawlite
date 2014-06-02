@@ -44,8 +44,14 @@ public class MockURLChain implements UrlProvider {
 		return list.get(current++);
 	}
 
-	@Override
 	public boolean add(CrawlableURL e, CrawlJob job) {
+		return false;
+	}
+
+
+	@Override
+	public boolean add(CrawlableURL e, CrawlJob job, int pirority) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 

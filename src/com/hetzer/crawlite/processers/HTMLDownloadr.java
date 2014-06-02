@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class Download_HTML extends AbstractDownload {
+public class HTMLDownloadr extends AbstractWriter {
 	public boolean Download(CrawlableURL source, File dir) {
 		String webSource = source.getString(CrawlableURL.WEB_SOURCE);
 		if (webSource != null) {
@@ -26,7 +26,7 @@ public class Download_HTML extends AbstractDownload {
 				e.printStackTrace();
 			}
 		}
-		source.setHTML_Flag(false);
+		source.putBoolean(CrawlableURL.HTML, false);
 		return true;
 
 	}

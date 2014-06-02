@@ -10,9 +10,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Random;
 
 import org.h2.tools.Server;
 
+import com.hetzer.crawlite.CrawlJobManager;
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 import com.hetzer.crawlite.framework.UrlProvider;
 import com.hetzer.crawlite.job.CrawlJob;
@@ -47,7 +49,7 @@ public class H2UrlProvider implements UrlProvider {
 					user, password);
 			Statement stat = connection.createStatement();
 			stat.execute("DROP TABLE IF EXISTS TEST");
-			stat.execute("CREATE TABLE TEST(URL VARCHAR(255),ISDONE BOOLEAN,JOB VARCHAR(255),ID INT AUTO_INCREMENT(0,1) PRIMARY KEY)");
+			stat.execute("CREATE TABLE TEST(URL VARCHAR(255),ISDONE BOOLEAN,JOB VARCHAR(255),PIRORITY INTEGER,PRIMARY KEY(JOB,URL))");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -67,21 +69,27 @@ public class H2UrlProvider implements UrlProvider {
 		return hasNext;
 	}
 
+	public static int i = 0;
+	@Override
 	public synchronized CrawlableURL next(CrawlJob job) {
 		PreparedStatement statement1;
 		PreparedStatement statement2;
-		
+
 		ResultSet result = null;
 		String url = null;
+		int depth = 0;
 		try {
-			statement1 = connection.prepareStatement("select top 1 URL from TEST where ISDONE = false "
-							+ "and JOB = ?");
+			statement1 = connection
+					.prepareStatement("select URL,PIRORITY from TEST where ISDONE = false "
+							+ "and JOB = ? order by PIRORITY asc limit 1");
 			statement1.setString(1, job.getName());
 			result = statement1.executeQuery();
-			
+
 			if (result.next()) {
 				url = result.getString("URL");
-				statement2 = connection.prepareStatement("update TEST SET ISDONE = 1 WHERE URL = ? and JOB = ?");
+				depth = result.getInt("PIRORITY");
+				statement2 = connection
+						.prepareStatement("update TEST SET ISDONE = 1 WHERE URL = ? and JOB = ?");
 				statement2.setString(1, url);
 				statement2.setString(2, job.getName());
 				int r = statement2.executeUpdate();
@@ -93,23 +101,30 @@ public class H2UrlProvider implements UrlProvider {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new MockResource(url);
+		CrawlableURL r = CrawlJobManager.makeUrlObject(url);
+		r.setDepth(depth);
+		return r;
 	}
 
-	public boolean add(CrawlableURL e, CrawlJob job) {
+	@Override
+	public boolean add(CrawlableURL e, CrawlJob job, int pirority) {
 		PreparedStatement preparedStatement;
 		int result = 0;
 		try {
 			preparedStatement = connection
-					.prepareStatement("insert into TEST SET URL = ? , ISDONE = 'false' , JOB = ?");
+					.prepareStatement("insert into TEST SET URL = ? , ISDONE = 'false' , JOB = ? ,PIRORITY = ?");
 			preparedStatement.setString(1, e.getURL());
 			preparedStatement.setString(2, job.getName());
+			preparedStatement.setInt(3, pirority);
 			result = preparedStatement.executeUpdate();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			if (e1.getSQLState().equals("23505")) {
+				/*System.out.println("DUPLICATE_KEY:" + e.getURL() + " in "
+						+ job.getName());*/
+			} else {
+				e1.printStackTrace();
+			}
 		}
-
 		return result == 1 ? true : false;
 	}
 

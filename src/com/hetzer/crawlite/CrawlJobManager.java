@@ -1,12 +1,16 @@
 package com.hetzer.crawlite;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.hetzer.crawlite.datamodel.CrawlableURL;
+import com.hetzer.crawlite.datamodel.Resource;
 import com.hetzer.crawlite.exception.OverFlowException;
 import com.hetzer.crawlite.framework.CThread;
 import com.hetzer.crawlite.framework.CThreadPool;
@@ -14,16 +18,15 @@ import com.hetzer.crawlite.framework.Processor;
 import com.hetzer.crawlite.job.CrawlJob;
 import com.hetzer.crawlite.job.CrawlJobFactory;
 import com.hetzer.crawlite.mock.MockProcessor;
-import com.hetzer.crawlite.processers.Download_CSS;
-import com.hetzer.crawlite.processers.Extract_HTML;
-import com.hetzer.crawlite.processers.Write_CSS;
-import com.hetzer.crawlite.processers.Download_CSS;
-import com.hetzer.crawlite.processers.Download_HTML;
-import com.hetzer.crawlite.processers.Download_JavaScript;
-import com.hetzer.crawlite.processers.Extractor_Implementation;
-import com.hetzer.crawlite.processers.Write_CSS;
-import com.hetzer.crawlite.processers.Write_HTML;
-import com.hetzer.crawlite.processers.Write_JavaScript;
+import com.hetzer.crawlite.processers.CSSWriter;
+import com.hetzer.crawlite.processers.HTMLExtractor;
+import com.hetzer.crawlite.processers.CSSFetcher;
+import com.hetzer.crawlite.processers.CSSWriter;
+import com.hetzer.crawlite.processers.HTMLDownloadr;
+import com.hetzer.crawlite.processers.JavaScriptWriter;
+import com.hetzer.crawlite.processers.CSSFetcher;
+import com.hetzer.crawlite.processers.HTMLFetcher;
+import com.hetzer.crawlite.processers.JavaScriptFetcher;
 import com.hetzer.crawlite.thread.GxyCThreadPool;
 
 /**
@@ -35,13 +38,33 @@ public class CrawlJobManager {
 	private CThreadPool threadPool;
 	private String jobPath;
 	private static CrawlJobManager crawlJobManager = new CrawlJobManager();
-
+	private static Constructor<? extends CrawlableURL> constructor;
+	
 	private CrawlJobManager() {
-		this(new HashMap<String, CrawlJob>());
+		this(new HashMap<String, CrawlJob>(),Resource.class);
+	}
+	
+	public static CrawlableURL makeUrlObject(String url) {
+		try {
+			return constructor.newInstance(url);
+		} catch (InstantiationException | IllegalAccessException
+				| IllegalArgumentException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	private CrawlJobManager(Map<String, CrawlJob> jobMap) {
+	private CrawlJobManager(Map<String, CrawlJob> jobMap,Class<? extends CrawlableURL> rClazz) {
 		this.jobMap = jobMap;
+		try {
+			constructor = rClazz.getConstructor(String.class);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public static CrawlJobManager instance() {
@@ -67,9 +90,9 @@ public class CrawlJobManager {
 		map.put("RetryTimes", 3);
 		List<Class<? extends Processor>> list = new ArrayList<Class<? extends Processor>>();
 		list.add(MockProcessor.class);
-		list.add(Write_HTML.class);
-		list.add(Download_HTML.class);
-		list.add(Extract_HTML.class);
+		list.add(HTMLFetcher.class);
+		list.add(HTMLDownloadr.class);
+		list.add(HTMLExtractor.class);
 		map.put("processorList", list);
 		CrawlJob job = makeNewJob(map);
 		putJob(job.getName(), job);

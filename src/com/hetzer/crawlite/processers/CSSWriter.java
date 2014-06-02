@@ -6,9 +6,9 @@ import java.util.Map;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class Download_CSS extends AbstractDownload {
+public class CSSWriter extends AbstractWriter {
 	public boolean Download(CrawlableURL source, File dir) {
-		if (source.isCSS_Flag()) {
+		if (source.getBoolean(CrawlableURL.CSS)) {
 			// Map<String, String> map_css = source.getMap_css();
 			try {
 
@@ -22,7 +22,7 @@ public class Download_CSS extends AbstractDownload {
 				File d = new File(file, name);
 				d.mkdir();
 				FileWriter fw = new FileWriter(new File(d, name + ".css"));
-				fw.write(source.getContent());
+				fw.write(source.getString(CrawlableURL.CSS));
 				fw.close();
 				// download_count_css++;
 				// }
@@ -34,7 +34,7 @@ public class Download_CSS extends AbstractDownload {
 			}
 
 		}
-		source.setCSS_Flag(false);
+		source.putBoolean(CrawlableURL.CSS, false);
 		return true;
 	}
 

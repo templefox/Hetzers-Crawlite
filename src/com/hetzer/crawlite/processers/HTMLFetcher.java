@@ -6,7 +6,7 @@ import java.net.URL;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class Write_HTML extends AbstractWrite {
+public class HTMLFetcher extends AbstractFetcher {
 
 	public void doit(CrawlableURL source) {
 		if (((source.getURL().matches("http.*?com.*?"))

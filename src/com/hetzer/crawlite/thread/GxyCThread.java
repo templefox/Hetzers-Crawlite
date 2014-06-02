@@ -113,7 +113,7 @@ public class GxyCThread extends Thread implements CThread {
 				sleepTime = SLEEP_TIME;
 				System.out.println(current.getURL() + " " + crawlJob.getName()
 						+ " " + threadname);
-
+				
 				process();
 
 				current = null;
@@ -126,8 +126,10 @@ public class GxyCThread extends Thread implements CThread {
 	private void process() {
 		for (Iterator iterator = processerChain.iterator(); iterator.hasNext();) {
 			Processor processor = (Processor) iterator.next();
-			processor.process(current, crawlJob);
-
+			boolean result = processor.process(current, crawlJob);
+			if (!result) {
+				break;
+			}
 		}
 	}
 

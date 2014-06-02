@@ -3,11 +3,12 @@ package com.hetzer.crawlite.processers;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.hetzer.crawlite.CrawlJobManager;
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 import com.hetzer.crawlite.job.CrawlJob;
 import com.hetzer.crawlite.mock.MockResource;
 
-public class Extract_CSS extends AbstractExtractor {
+public class CSSExtractr extends AbstractExtractor {
 	public boolean Extract(CrawlableURL source, CrawlJob crawlJob) {
 		String webSource = source.getString(CrawlableURL.WEB_SOURCE);
 		if (webSource != null) {
@@ -16,13 +17,13 @@ public class Extract_CSS extends AbstractExtractor {
 			Matcher m_css;
 			p_css = Pattern.compile(regular_css);
 			m_css = p_css.matcher(webSource);
-			int i_css = 0;
 			while (m_css.find()) {
-				crawlJob.getUrlProvider().add(new MockResource(m_css.group(1)),
-						crawlJob);
-				i_css++;
+				CrawlableURL object = CrawlJobManager.makeUrlObject(m_css.group(1));
+				object.setDepth(source.getDepth()+1);
+				crawlJob.getUrlProvider()
+						.add(object,
+								crawlJob,object.getDepth());
 			}
-			source.setUrlnum(source.getUrlnum() + i_css);
 
 		}
 		return true;

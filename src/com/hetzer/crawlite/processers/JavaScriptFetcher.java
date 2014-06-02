@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class Write_JavaScript extends AbstractWrite {
+public class JavaScriptFetcher extends AbstractFetcher {
 	public void doit(CrawlableURL source) {
 		if (source.getURL().matches(".*?js")) {
 			try {
@@ -21,9 +21,8 @@ public class Write_JavaScript extends AbstractWrite {
 					sb_js.append(s_js); // 保证其往下一行读
 				}
 				br_js.close();
-				source.setJS_Flag(true);
-				;
-				source.setContent(sb_js.toString());
+				source.putBoolean(CrawlableURL.JS, true);
+				source.putString(CrawlableURL.JS, sb_js.toString());
 				System.out.println("Javascript Write Successfully, ");
 			} catch (Exception e) {
 				System.out.println("Javascript Write Fail");

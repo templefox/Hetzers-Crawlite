@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
-public class Write_CSS extends AbstractWrite {
+public class CSSFetcher extends AbstractFetcher {
 	public void doit(CrawlableURL source) {
 		if (source.getURL().matches(".*?css")) {
 			try {
@@ -22,8 +22,8 @@ public class Write_CSS extends AbstractWrite {
 
 				}
 				br_css.close();
-				source.setCSS_Flag(true);
-				source.setContent(sb_css.toString());
+				source.putBoolean(CrawlableURL.CSS, true);
+				source.putString(CrawlableURL.CSS,sb_css.toString());
 				System.out.println("CSS Write Successfully");
 			} catch (Exception e) {
 				System.out.println("CSS Write Fail");
