@@ -9,7 +9,7 @@ import java.util.Map;
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
 public class CSSFetcher extends AbstractFetcher {
-	public void doit(CrawlableURL source) {
+	public void fetch(CrawlableURL source) {
 		if (source.getURL().matches(".*?css")) {
 			try {
 				URL url_css = new URL(source.getURL());

@@ -19,6 +19,10 @@ public interface CrawlableURL {
 	public int getDepth();
 
 	public void setDepth(int depth);
+	
+	public void setCookie(String cookie);
+	
+	public String getCookie();
 
 	public abstract Boolean putBoolean(String key, boolean value);
 

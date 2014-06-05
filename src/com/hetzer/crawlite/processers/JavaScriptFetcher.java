@@ -9,7 +9,7 @@ import java.util.Map;
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
 public class JavaScriptFetcher extends AbstractFetcher {
-	public void doit(CrawlableURL source) {
+	public void fetch(CrawlableURL source) {
 		if (source.getURL().matches(".*?js")) {
 			try {
 				URL url_js = new URL(source.getURL());

@@ -10,7 +10,6 @@ import com.hetzer.crawlite.framework.ProcesserChain;
 import com.hetzer.crawlite.framework.Processor;
 import com.hetzer.crawlite.framework.UrlProvider;
 import com.hetzer.crawlite.job.CrawlJob;
-import com.hetzer.crawlite.mock.MockResource;
 
 public class GxyCThread extends Thread implements CThread {
 	static int i = 0;

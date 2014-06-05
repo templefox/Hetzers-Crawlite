@@ -18,7 +18,6 @@ import com.hetzer.crawlite.CrawlJobManager;
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 import com.hetzer.crawlite.framework.UrlProvider;
 import com.hetzer.crawlite.job.CrawlJob;
-import com.hetzer.crawlite.mock.MockResource;
 
 public class H2UrlProvider implements UrlProvider {
 

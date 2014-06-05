@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 import com.hetzer.crawlite.CrawlJobManager;
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 import com.hetzer.crawlite.job.CrawlJob;
-import com.hetzer.crawlite.mock.MockResource;
 
 public class CSSExtractr extends AbstractExtractor {
 	public boolean Extract(CrawlableURL source, CrawlJob crawlJob) {

@@ -5,7 +5,6 @@ import java.io.File;
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 import com.hetzer.crawlite.framework.Processor;
 import com.hetzer.crawlite.job.CrawlJob;
-import com.hetzer.crawlite.mock.MockResource;
 
 public abstract class AbstractExtractor implements Processor {
 	@Override

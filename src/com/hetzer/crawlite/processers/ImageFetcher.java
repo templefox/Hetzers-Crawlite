@@ -9,7 +9,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import com.hetzer.crawlite.datamodel.CrawlableURL;
 
 public class ImageFetcher extends AbstractFetcher {
-	public void doit(CrawlableURL source) {
+	public void fetch(CrawlableURL source) {
 		if (source.getURL().matches(".*?gif")
 				|| source.getURL().matches(".*?png")
 				|| source.getURL().matches(".*?jpg")) {

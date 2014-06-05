@@ -7,7 +7,7 @@ import com.hetzer.crawlite.job.CrawlJob;
 public abstract class AbstractFetcher implements Processor {
 	@Override
 	public boolean process(CrawlableURL source, CrawlJob crawlJob) {
-		doit(source);
+		fetch(source);
 		if (source.getURL() != null) {
 			return true;
 		} else {
@@ -15,6 +15,6 @@ public abstract class AbstractFetcher implements Processor {
 		}
 	}
 
-	public abstract void doit(CrawlableURL url);
+	public abstract void fetch(CrawlableURL url);
 
 }

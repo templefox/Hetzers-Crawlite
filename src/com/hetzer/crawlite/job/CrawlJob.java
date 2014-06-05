@@ -13,7 +13,6 @@ import com.hetzer.crawlite.framework.UrlProvider;
 import com.hetzer.crawlite.framework.urlProvider.H2UrlProvider;
 import com.hetzer.crawlite.mock.MockProcesserChain;
 import com.hetzer.crawlite.mock.MockProcessor;
-import com.hetzer.crawlite.mock.MockResource;
 import com.hetzer.crawlite.mock.MockURLChain;
 import com.hetzer.crawlite.thread.GxyCThread;
 
